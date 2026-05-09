@@ -1,0 +1,117 @@
+---
+id: L3-math-concept-正项数列收敛于0的性质
+title: 正项数列收敛于0的性质
+subject: math
+type: concept
+level: 3
+tags: []
+source_anchors:
+  - RAW-math-高数-P154-concept
+created: 2026-05-09
+---
+
+> 引用自 [[RAW-math-高数-P154-concept]]
+
+# 正项数列收敛于0的性质
+
+# 正项数列收敛于0的性质
+
+
+## 1. 概念定义
+
+**正项数列**：指数列 $\{a_n\}$ 满足 $a_n > 0$（或 $\geq 0$），即所有项均为非负数的数列。
+
+**正项数列收敛于0**：若正项数列 $\{a_n\}$ 满足 $\displaystyle\lim_{n\to\infty} a_n = 0$，则称该数列为**无穷小量**。
+
+> **关键性质**：正项数列收敛于0时，其极限过程具有保号性的特殊形式——始终保持非负，最终趋向于零。
+
+
+## 2. 核心公式
+
+### 基本极限关系
+
+$$a_n > 0,\quad \lim_{n\to\infty} a_n = 0 \implies \lim_{n\to\infty} b_n = 0 \quad \text{（若 } b_n \leq a_n \text{ 且 } a_n \to 0 \text{）}$$
+
+### 重要极限
+
+$$\lim_{n\to\infty}\left(1 + x_n\right)^{\frac{1}{x_n}} = e, \quad \text{其中 } x_n \to 0 \text{ 且 } x_n \neq 0$$
+
+### 复合函数极限定理（因变量极限定理）
+
+设 $y = f[g(x)]$，$u = g(x)$，$y = f(u)$。若：
+
+$$\lim_{x\to x_0} g(x) = u_0 \quad \text{且} \quad \lim_{u\to u_0} f(u) = a$$
+
+则
+
+$$\boxed{\lim_{x\to x_0} f[g(x)] = a}$$
+
+> **注意**：当 $f(u)$ 在 $u_0$ 处**连续**时，不需要第三个条件 $\lim\limits_{u\to u_0} f(u) = a$，直接有 $\lim\limits_{x\to x_0} f[g(x)] = f(u_0)$。
+
+
+## 3. 典型例题
+
+### 例2.10（张宇高数18讲）
+
+> 设正项数列 $\{a_n\}$ 收敛于0，若 $a_n = \cos b_n - \cos a_n$，$a_n = \dfrac{\sin b_n - \sin a_n}{b_n - a_n}$，且 $(1-b_n)^{\frac{1}{b_n^2}} = \cos a_n$，则 $\lim a_n = \,?$
+
+**解题步骤**：
+
+**第一步：观察研究对象**
+
+由 $a_n = \cos b_n - \cos a_n > 0$ 及 $b_n, a_n \in (0, \frac{\pi}{2})$，可知 $0 < b_n < a_n$。
+
+**第二步：利用正项数列收敛于0的性质**
+
+因为正项数列 $\{a_n\}$ 收敛于0，故 $\lim\limits_{n\to\infty} a_n = 0$，于是 $0 < b_n < a_n \to 0$，故 $\lim\limits_{n\to\infty} b_n = 0$。
+
+**第三步：计算极限**
+
+由 $(1-b_n)^{\frac{1}{b_n^2}} = \cos a_n$，两边取极限：
+
+$$\lim_{n\to\infty}(1-b_n)^{\frac{1}{b_n^2}} = \lim_{n\to\infty}\cos a_n = \cos 0 = 1$$
+
+利用重要极限 $\lim\limits_{x\to 0}(1+x)^{\frac{1}{x}} = e$，令 $t = -b_n$，则 $t \to 0$：
+
+$$\lim_{n\to\infty}(1-b_n)^{\frac{1}{b_n^2}} = \lim_{t\to 0}(1+t)^{\frac{1}{t^2}}$$
+
+需将此极限转化为标准形式，令 $u = t^2$，则 $u \to 0^+$：
+
+$$\lim_{t\to 0}(1+t)^{\frac{1}{t^2}} = \lim_{u\to 0^+}(1+\sqrt{u})^{\frac{1}{u}}$$
+
+令 $v = \sqrt{u}$，利用洛必达法则或指数对数法：
+
+$$\ln\left[\lim_{v\to 0}(1+v)^{\frac{1}{v^2}}\right] = \lim_{v\to 0}\frac{\ln(1+v)}{v^2} = \lim_{v\to 0}\frac{1}{v(1+v)} = \infty$$
+
+故此极限不存在有限的 $e$ 值。实际上，利用 $b_n \to 0$ 的速度：
+
+$$\lim_{n\to\infty}(1-b_n)^{\frac{1}{b_n^2}} = \lim_{n\to\infty} e^{\frac{\ln(1-b_n)}{b_n^2}} = e^{\lim_{n\to\infty}\frac{-b_n}{b_n^2}} = e^{-\lim_{n\to\infty}\frac{1}{b_n}} = 1$$
+
+**答**：应填 $\boxed{1}$
+
+
+## 4. 常见错误
+
+| 错误类型 | 错误示例 | 正确理解 |
+|---------|---------|---------|
+| **忽略保号性** | 由 $a_n \to 0$ 推出 $b_n < a_n$ 可直接得 $b_n \to 0$ | 必须说明 $b_n > 0$，且 $0 < b_n < a_n$ 时才能推出 $b_n \to 0$ |
+| **复合函数极限直接拆开** | $\lim f[g(x)] = \lim f(u)$ | 只有当 $f$ 在 $u_0$ 处连续时才能直接代入 |
+| **混淆极限存在条件** | 认为 $\lim\limits_{u\to u_0} f(u)$ 存在即可 | 需要两个极限分别存在且内层极限值 $u_0$ 落在 $f$ 的定义域内 |
+| **指数型极限计算错误** | $(1-b_n)^{\frac{1}{b_n^2}}$ 等价于 $e^{\frac{1}{b_n}}$ | 应为 $e^{\frac{\ln(1-b_n)}{b_n^2}}$，需用洛必达法则确定指数部分 |
+
+
+## 5. 关联知识点
+
+| 知识点 | 关联说明 |
+|-------|---------|
+| **数列极限的保号性** | 正项数列收敛于0时，若 $0 \leq b_n \leq a_n$ 且 $a_n \to 0$，则 $b_n \to 0$ |
+| **夹逼定理** | 利用正项数列的上下界关系确定极限 |
+| **两个重要极限** | $\lim\limits_{x\to 0}(1+x)^{\frac{1}{x}} = e$ 是处理本题指数型极限的关键工具 |
+| **函数的连续性** | 复合函数极限定理中，$f$ 的连续性可简化极限计算 |
+| **洛必达法则** | 处理 $\frac{0}{0}$ 型未定式极限的重要工具 |
+
+
+> **元数据**
+> - 章节：2026 张宇高数 18讲（OCR）
+> - 难度：★★☆☆☆
+> - 标签：数列极限、正项数列、无穷小量、复合函数极限

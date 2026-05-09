@@ -1,0 +1,60 @@
+---
+id: L3-math-concept-高等数学-第92讲
+title: 高等数学-第92讲
+subject: math
+type: concept
+level: 3
+tags: []
+source_anchors:
+  - RAW-math-高数-P353-concept
+created: 2026-05-09
+---
+
+> 引用自 [[RAW-math-高数-P353-concept]]
+
+# 高等数学-第92讲
+
+**来源：** 高等数学第92讲
+
+```markdown
+# 高等数学-第92讲：多元函数微分
+
+## 核心概念定义
+
+多元函数微分是研究多元函数在某一点处局部变化率的方法。它包括偏导数和全微分，用于描述多元函数在特定方向上的变化。
+
+## 核心公式
+
+```latex
+\begin{align*}
+\frac{\partial z}{\partial x} &= \lim_{\Delta x \to 0} \frac{f(x+\Delta x, y) - f(x, y)}{\Delta x} \\
+\frac{\partial z}{\partial y} &= \lim_{\Delta y \to 0} \frac{f(x, y+\Delta y) - f(x, y)}{\Delta y} \\
+dz &= \frac{\partial z}{\partial x} dx + \frac{\partial z}{\partial y} dy
+\end{align*}
+```
+
+## 典型例题
+
+**例题**：设函数 \( f(x, y) = x^2y + 3xy^2 \)，求在点 \( (1, 2) \) 处的偏导数和全微分。
+
+**解答**：
+
+1. 计算 \( \frac{\partial f}{\partial x} \) 和 \( \frac{\partial f}{\partial y} \)：
+   \[
+   \frac{\partial f}{\partial x} = 2xy + 3y^2, \quad \frac{\partial f}{\partial y} = x^2 + 6xy
+   \]
+2. 在点 \( (1, 2) \) 处，代入 \( x = 1 \) 和 \( y = 2 \)：
+   \[
+   \frac{\partial f}{\partial x} = 2 \cdot 1 \cdot 2 + 3 \cdot 2^2 = 14, \quad \frac{\partial f}{\partial y} = 1^2 + 6 \cdot 1 \cdot 2 = 13
+   \]
+3. 计算全微分 \( dz \)：
+   \[
+   dz = 14dx + 13dy
+   \]
+
+## 常见错误
+
+1. 忽略偏导数的定义，直接求导。
+2. 计算全微分时，忘记将偏导数乘以相应的微分变量。
+3. 在求偏导数时，混淆自变量和因变量。
+```

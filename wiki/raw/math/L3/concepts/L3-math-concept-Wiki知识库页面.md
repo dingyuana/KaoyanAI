@@ -1,0 +1,170 @@
+---
+id: L3-math-concept-Wiki知识库页面
+title: Wiki知识库页面
+subject: math
+type: concept
+level: 3
+tags: ['高等数学', '基础概念']
+source_anchors:
+  - RAW-math-高数-P052-concept
+created: 2026-05-09
+---
+
+> 引用自 [[RAW-math-高数-P052-concept]]
+
+# Wiki知识库页面
+
+
+# Wiki知识库页面
+
+
+## 两个重要极限
+
+### 📖 概念定义
+
+**两个重要极限**是高等数学中求极限问题的基石，在考研数学中占据核心地位。
+
+| 序号 | 公式 | 关键特征 |
+| 第一重要极限 | $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}=1$ | $\frac{0}{0}$ 型，分子为正弦函数 |
+| 第二重要极限 | $\displaystyle\lim_{x\to\infty}\left(1+\frac{1}{x}\right)^x=e$ | $1^\infty$ 型，底数为 $1+\frac{1}{x}$ |
+
+
+### 📐 核心公式
+
+#### 第一重要极限
+
+$$\lim_{x\to 0}\frac{\sin x}{x}=1$$
+
+**等价形式**（需熟记）：
+$$\lim_{x\to 0}\frac{x}{\sin x}=1$$
+$$\lim_{x\to 0}\frac{\tan x}{x}=1$$
+$$\lim_{x\to 0}\frac{\arcsin x}{x}=1$$
+$$\lim_{x\to 0}\frac{\arctan x}{x}=1$$
+
+#### 第二重要极限
+
+$$\lim_{x\to\infty}\left(1+\frac{1}{x}\right)^x=e$$
+
+**等价形式**：
+$$\lim_{x\to 0}(1+x)^{\frac{1}{x}}=e$$
+$$\lim_{n\to\infty}\left(1+\frac{1}{n}\right)^n=e$$
+
+
+### 📝 典型例题
+
+#### 例题一：第一重要极限的直接应用
+
+**题目**：求 $\displaystyle\lim_{x\to 0}\frac{\sin 3x}{\sin 5x}$
+
+**解答**：
+
+$$\lim_{x\to 0}\frac{\sin 3x}{\sin 5x} = \lim_{x\to 0}\frac{\sin 3x}{3x}\cdot\frac{5x}{\sin 5x}\cdot\frac{3}{5} = 1\cdot 1\cdot\frac{3}{5} = \frac{3}{5}$$
+
+**考点分析**：
+- 识别 $\frac{0}{0}$ 型
+- 凑第一重要极限的标准形式
+- 系数处理技巧
+
+
+#### 例题二：第一重要极限的变形
+
+**题目**：求 $\displaystyle\lim_{x\to 0}\frac{1-\cos x}{x^2}$
+
+**解答**：
+
+方法一（利用公式）：
+$$\lim_{x\to 0}\frac{1-\cos x}{x^2} = \lim_{x\to 0}\frac{2\sin^2\frac{x}{2}}{x^2} = \frac{1}{2}\lim_{x\to 0}\left(\frac{\sin\frac{x}{2}}{\frac{x}{2}}\right)^2 = \frac{1}{2}\cdot 1^2 = \frac{1}{2}$$
+
+方法二（利用等价无穷小）：
+$$1-\cos x \sim \frac{1}{2}x^2 \quad (x\to 0)$$
+$$\lim_{x\to 0}\frac{1-\cos x}{x^2} = \lim_{x\to 0}\frac{\frac{1}{2}x^2}{x^2} = \frac{1}{2}$$
+
+**考点分析**：
+- 三角恒等变形：$1-\cos x = 2\sin^2\frac{x}{2}$
+- 等价无穷小替换
+
+
+#### 例题三：第二重要极限
+
+**题目**：求 $\displaystyle\lim_{x\to\infty}\left(\frac{x+1}{x-1}\right)^x$
+
+**解答**：
+
+$$\left(\frac{x+1}{x-1}\right)^x = \left(1+\frac{2}{x-1}\right)^x$$
+
+令 $t = x-1$，则 $x = t+1$，$t\to\infty$：
+
+$$= \lim_{t\to\infty}\left(1+\frac{2}{t}\right)^{t+1} = \lim_{t\to\infty}\left(1+\frac{2}{t}\right)^t\cdot\left(1+\frac{2}{t}\right)$$
+
+$$= \left[\lim_{t\to\infty}\left(1+\frac{1}{\frac{t}{2}}\right)^{\frac{t}{2}}\right]^2 \cdot 1 = e^2$$
+
+**考点分析**：
+- $1^\infty$ 型的识别
+- 凑第二重要极限的标准形式
+- 指数的灵活处理
+
+
+#### 例题四：综合应用
+
+**题目**：求 $\displaystyle\lim_{x\to 0}\left(\frac{\sin x}{x}\right)^{\frac{1}{1-\cos x}}$
+
+**解答**：
+
+这是 $1^\infty$ 型，套用公式：
+$$\lim_{x\to 0}\left(\frac{\sin x}{x}\right)^{\frac{1}{1-\cos x}} = e^{\lim_{x\to 0}\frac{1}{1-\cos x}\cdot\ln\left(\frac{\sin x}{x}\right)}$$
+
+计算指数：
+$$\lim_{x\to 0}\frac{\ln\left(\frac{\sin x}{x}\right)}{1-\cos x} = \lim_{x\to 0}\frac{\ln\left(1+\frac{\sin x-x}{x}\right)}{1-\cos x}$$
+
+利用 $\ln(1+u)\sim u$，$\sin x - x \sim -\frac{x^3}{6}$，$1-\cos x\sim\frac{x^2}{2}$：
+
+$$= \lim_{x\to 0}\frac{-\frac{x^3}{6}}{\frac{x^2}{2}\cdot x} = \lim_{x\to 0}\frac{-\frac{x^3}{6}}{\frac{x^3}{2}} = -\frac{1}{3}$$
+
+因此原式 $= e^{-\frac{1}{3}}$
+
+**考点分析**：
+- $1^\infty$ 型标准处理方法
+- 泰勒展开或等价无穷小
+- 对数运算
+
+
+### ⚠️ 常见错误
+
+| 错误类型 | 错误示例 | 正确做法 |
+| 滥用公式 | $\lim_{x\to\infty}\frac{\sin x}{x}=1$ | $x\to\infty$ 时不适用第一重要极限 |
+| 凑形式错误 | $\lim_{x\to 0}\frac{\sin 2x}{x}=1$ | 应为 $\frac{\sin 2x}{2x}\cdot 2 = 2$ |
+| 忽略条件 | $\lim_{x\to\infty}\left(1+\frac{1}{x}\right)^x = e$ ✓ | 必须确保是标准形式 |
+| 顺序错误 | 对 $1^\infty$ 型直接写成 $e$ | 必须计算指数部分的极限 |
+
+
+### 🔗 关联知识点
+
+- [[等价无穷小]]
+- [[洛必达法则]]
+- [[函数的连续性]]
+- [[导数定义]]
+- [[泰勒公式]]
+
+
+### 📚 扩展阅读
+
+**重要推论**：
+
+1. 若 $\lim\alpha(x)=0$，则 $\lim\frac{\sin\alpha(x)}{\alpha(x)}=1$
+2. 若 $\lim\alpha(x)=0$，$\lim\beta(x)=\infty$，则 $\lim[1+\alpha(x)]^{\beta(x)}=e^{\lim\alpha(x)\beta(x)}$
+
+
+## 📋 元数据
+
+```
+- 科目：数学
+- 章节：高等数学-函数与极限
+- 难度：★★★☆☆
+- 标签：极限，两个重要极限，sinx/x，e，1^∞型
+- 考频：高频
+- 创建时间：2026-04-28
+- 版本：v1.0
+```
+
+
+> **备考提示**：两个重要极限及其等价形式必须烂熟于心，是后续学习导数、积分的重要基础。建议配合大量练习达到熟练运用的程度。
