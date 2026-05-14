@@ -1,9 +1,21 @@
-import katex from 'katex';
+/* KaTeX 通过 CDN 全局加载（standalone 镜像不含 node_modules） */
+type KatexType = typeof import('katex');
+
+function getKatex(): KatexType {
+  if (typeof window !== 'undefined' && (window as any).katex) {
+    return (window as any).katex as KatexType;
+  }
+  // Server-side rendering fallback: return mock
+  return {
+    renderToString: (f: string) => `<span class="text-red-400">${f}</span>`,
+  } as KatexType;
+}
 
 function renderInlineLatex(text: string): string {
+  const k = getKatex();
   return text.replace(/\$(.+?)\$/g, (_, formula: string) => {
     try {
-      return katex.renderToString(formula.trim(), { displayMode: false, throwOnError: false });
+      return k.renderToString(formula.trim(), { displayMode: false, throwOnError: false });
     } catch {
       return `<span class="text-red-400">$${formula}$</span>`;
     }
@@ -27,7 +39,7 @@ export function renderMarkdown(text: string): string {
 
   html = html.replace(/\$\$([\s\S]*?)\$\$/g, (_, formula: string) => {
     try {
-      return katex.renderToString(formula.trim(), { displayMode: true, throwOnError: false });
+      return getKatex().renderToString(formula.trim(), { displayMode: true, throwOnError: false });
     } catch {
       return `<div class="text-red-400">$$${formula}$$</div>`;
     }
