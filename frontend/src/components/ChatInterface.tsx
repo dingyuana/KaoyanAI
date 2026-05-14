@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, BookOpen, Loader2, AlertTriangle, AlertCircle, Clock, FileQuestion, RefreshCw } from 'lucide-react';
+import { Send, BookOpen, Loader2, AlertTriangle, AlertCircle, Clock, FileQuestion, RefreshCw, MessageSquare } from 'lucide-react';
 import { MessageBubble } from './MessageBubble';
 import { sendChatMessageStream, ErrorType } from '@/lib/api';
 
@@ -59,11 +59,16 @@ export function ChatInterface() {
     }
   }, [input]);
 
+  useEffect(() => {
+    if (!isLoading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isLoading]);
+
   const handleRetry = useCallback(() => {
     const q = lastQuestionRef.current;
     if (q) {
       setInput(q);
-      // Trigger submit via the form
       requestAnimationFrame(() => {
         const form = document.querySelector('form');
         if (form) form.requestSubmit();
@@ -106,7 +111,6 @@ export function ChatInterface() {
         streamMsg.error = error;
         streamMsg.errorType = type || 'unknown';
         const config = ERROR_CONFIG[streamMsg.errorType];
-        // Show error as styled card
         const errorHtml = `<div class="error-card" data-error-type="${streamMsg.errorType}">${error}</div>`;
         streamMsg.content = errorHtml;
         setMessages((prev) =>
@@ -142,71 +146,82 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-60px)]">
-      <div className="flex items-center gap-1 px-4 py-2 border-b dark:border-gray-700 bg-white dark:bg-gray-800">
+    <div className="flex flex-col h-full">
+      <div className="flex items-center gap-1 px-5 py-2.5 border-b dark:border-gray-700 bg-white dark:bg-gray-800/50">
         {SUBJECTS.map((s) => (
           <button
             key={s.id}
             onClick={() => s.active && setSubject(s.id)}
             disabled={!s.active}
-            className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+            className={`px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
               subject === s.id
-                ? 'bg-blue-500 text-white font-medium'
+                ? 'bg-blue-500 text-white font-medium shadow-sm'
                 : s.active
                   ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   : 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
             }`}
           >
             {s.label}
-            {!s.active && <span className="ml-1 text-xs">(即将上线)</span>}
+            {!s.active && <span className="ml-1 text-xs opacity-60">(即将上线)</span>}
           </button>
         ))}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-4">
-        {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center text-gray-400 dark:text-gray-500">
-            <BookOpen className="w-12 h-12 mb-4 opacity-50" />
-            <p className="text-lg mb-1 font-medium text-gray-500 dark:text-gray-400">考研知识问答助手</p>
-            <p className="text-sm max-w-md">
-              基于考研知识库，智能解答高等数学、线性代数、概率论等问题
+      <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4 scrollbar-thin">
+        {messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center select-none">
+            <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-5">
+              <MessageSquare className="w-8 h-8 text-blue-500/70" />
+            </div>
+            <p className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-2">考研知识问答助手</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 max-w-md leading-relaxed">
+              基于考研数学知识库，智能解答高等数学、线性代数、概率论等问题
+            </p>
+            <p className="text-xs text-gray-300 dark:text-gray-600 mt-4">
+              输入问题开始提问 · 支持 LaTeX 公式
             </p>
           </div>
-        )}
-
-        {messages.map((message) => {
-          const errorInfo = message.role === 'assistant' ? getErrorInfo(message.content) : null;
-          if (errorInfo) {
-            const Icon = errorInfo.icon;
-            return (
-              <div key={message.id} className="flex justify-start mb-4">
-                <div className={`max-w-[80%] rounded-2xl px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-bl-md shadow-sm`}>
-                  <div className="flex items-start gap-3">
-                    <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${errorInfo.color}`} />
-                    <div className="flex-1 min-w-0">
-                      <p className={`text-sm ${errorInfo.color}`}>{errorInfo.message}</p>
-                      <button
-                        onClick={handleRetry}
-                        className="mt-2 inline-flex items-center gap-1.5 text-xs text-blue-500 hover:text-blue-600 transition-colors"
-                      >
-                        <RefreshCw className="w-3 h-3" />
-                        重新提问
-                      </button>
+        ) : (
+          messages.map((message) => {
+            const errorInfo = message.role === 'assistant' ? getErrorInfo(message.content) : null;
+            if (errorInfo) {
+              const Icon = errorInfo.icon;
+              return (
+                <div key={message.id} className="flex justify-start mb-3 animate-fade-in">
+                  <div className="max-w-[85%] md:max-w-[75%] rounded-2xl px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-bl-md shadow-sm">
+                    <div className="flex items-start gap-3">
+                      <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${errorInfo.color}`} />
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm ${errorInfo.color}`}>{errorInfo.message}</p>
+                        <button
+                          onClick={handleRetry}
+                          className="mt-2 inline-flex items-center gap-1.5 text-xs text-blue-500 hover:text-blue-600 transition-colors"
+                        >
+                          <RefreshCw className="w-3 h-3" />
+                          重新提问
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          }
-          return <MessageBubble key={message.id} message={message} />;
-        })}
+              );
+            }
+            return <MessageBubble key={message.id} message={message} />;
+          })
+        )}
 
         {latestSources.length > 0 && (
-          <div className="mb-4 px-2">
-            <p className="text-xs text-gray-400 mb-2 font-medium">参考来源</p>
-            <div className="flex flex-wrap gap-2">
+          <div className="mb-3 px-1 animate-fade-in">
+            <p className="text-xs text-gray-400 mb-2 font-medium flex items-center gap-1.5">
+              <BookOpen className="w-3.5 h-3.5" />
+              参考来源
+            </p>
+            <div className="flex flex-wrap gap-1.5">
               {latestSources.map((src, i) => (
-                <span key={i} className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-1 rounded-md" title={src}>
+                <span
+                  key={i}
+                  className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2.5 py-1 rounded-full border border-gray-200 dark:border-gray-700"
+                >
                   {src}
                 </span>
               ))}
@@ -215,11 +230,15 @@ export function ChatInterface() {
         )}
 
         {isLoading && !streamRef.current?.content && (
-          <div className="flex justify-start mb-4">
+          <div className="flex justify-start mb-3 animate-fade-in">
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
-              <div className="flex items-center gap-2 text-gray-400">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-sm">检索知识库...</span>
+              <div className="flex items-center gap-2.5">
+                <div className="flex gap-1">
+                  <span className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
+                <span className="text-sm text-gray-400">思考中...</span>
               </div>
             </div>
           </div>
@@ -228,9 +247,9 @@ export function ChatInterface() {
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3">
+      <div className="border-t dark:border-gray-700 bg-white dark:bg-gray-800 px-4 md:px-6 py-3">
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-          <div className="flex items-end gap-2 bg-gray-100 dark:bg-gray-700 rounded-2xl px-4 py-2">
+          <div className="flex items-end gap-2 bg-gray-100 dark:bg-gray-700/80 rounded-2xl px-4 py-2 focus-within:ring-2 focus-within:ring-blue-400/30 transition-all duration-200">
             <textarea
               ref={inputRef}
               value={input}
@@ -244,9 +263,13 @@ export function ChatInterface() {
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
-              className="flex-shrink-0 p-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-500 transition-colors"
+              className="flex-shrink-0 p-2.5 rounded-xl bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 transition-all duration-200 active:scale-95"
             >
-              <Send className="w-4 h-4" />
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
             </button>
           </div>
           <p className="text-xs text-gray-400 mt-1.5 text-center">
