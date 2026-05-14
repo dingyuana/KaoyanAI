@@ -1,0 +1,41 @@
+---
+id: L3-math-concept-高等数学-第130讲
+title: 高等数学-第130讲
+subject: math
+type: concept
+level: 3
+tags: ['基础概念']
+source_anchors: ['RAW-math-高数-P232-concept']
+created: 2026-05-09
+---
+
+> 引用自 [[RAW-math-高数-P232-concept]]
+
+# 高等数学-第130讲
+
+**来源：** 高等数学第130讲
+
+```markdown
+# 高等数学-第130讲：无穷级数
+
+## 核心概念定义
+无穷级数是数学分析中的一个重要概念，它由一系列数按照一定的顺序排列并求和得到。在数学一、数学三的考研数学中，无穷级数主要研究幂级数和一般级数的收敛性、和函数等问题。
+
+## 核心公式
+```latex
+\begin{align*}
+R &= \lim_{n \to \infty} \left| \frac{a_n}{a_{n+1}} \right| \\
+S(x) &= \sum_{n=0}^{\infty} a_n x^n
+\end{align*}
+```
+
+## 典型例题
+**例16.48** 设 \( f(x) = e^x + \sum_{n=1}^{\infty} n^n \)，求级数 \( \sum_{n=1}^{\infty} n^n \) 的收敛域及和函数。
+
+**解**：因为 \( \lim_{n \to \infty} \frac{n^n}{(n+1)^n} = \frac{1}{e} \)，所以幂级数 \( \sum_{n=1}^{\infty} n^n \) 的收敛半径为 \( \frac{1}{e} \)。因为 \( \sum_{n=1}^{\infty} n^n \) 在 \( (-\frac{1}{e}, \frac{1}{e}) \) 内均收敛，所以级数 \( \sum_{n=1}^{\infty} n^n \) 的收敛域为 \( (-\frac{1}{e}, \frac{1}{e}) \)。
+
+## 常见错误
+1. 忽略收敛半径的计算。
+2. 错误地使用级数求和公式。
+3. 忽略级数的收敛域。
+```

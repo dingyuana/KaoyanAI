@@ -1,0 +1,58 @@
+---
+id: L3-math-concept-高等数学-第80讲
+title: 高等数学-第80讲
+subject: math
+type: concept
+level: 3
+tags: ['基础概念']
+source_anchors: ['RAW-math-高数-P340-concept']
+created: 2026-05-09
+---
+
+> 引用自 [[RAW-math-高数-P340-concept]]
+
+# 高等数学-第80讲
+
+**来源：** 高等数学第80讲
+
+```markdown
+# 高等数学-第80讲：一元函数和今学的应用(二)——积分等式与和今不等式
+
+## 核心概念定义
+- 积分等式：涉及函数在特定区间上的积分，通过变换积分变量或函数形式，简化积分计算。
+- 积分不等式：研究函数在特定区间上的积分与某个常数之间的大小关系。
+
+## 核心公式
+```latex
+\begin{align*}
+I &= \int_a^b f(x) \, dx, \\
+I &= \int_a^b f(a+b-x) \, dx, \\
+I &= -\int_a^b [f(x) + f(a+b-x)] \, dx, \\
+I &= \int_a^b [f(x) + f(a+b-x)] \, dx, \\
+I &= 2 \int_0^{\frac{\pi}{2}} f(\sin x) \, dx, \\
+I &= 2 \int_0^{\frac{\pi}{2}} f(\cos x) \, dx, \\
+I &= \int_0^{\frac{\pi}{2}} f(\sin x, \cos x) \, dx.
+\end{align*}
+```
+
+## 典型例题
+**例11.7**：求积分 $\int_0^{\frac{\pi}{2}} (4\cos^2 x - 2\cos x) \, dx$。
+
+**解**：令 $x = \tan t$，则 $dx = \sec^2 t \, dt$，原积分变为：
+$$
+\int_0^{\frac{\pi}{2}} (4\cos^2 x - 2\cos x) \, dx = \int_0^{\frac{\pi}{4}} (4\cos^2 t - 2\cos t) \sec^2 t \, dt.
+$$
+化简后，利用三角恒等式和积分技巧，得到 $I = 8$。
+
+**例11.8**：求积分 $\int_0^{\frac{\pi}{2}} \sqrt{\cos^2 x - \cos x} \, dx$。
+
+**解**：令 $x = \frac{\pi}{2} - t$，则 $dx = -dt$，原积分变为：
+$$
+\int_0^{\frac{\pi}{2}} \sqrt{\cos^2 x - \cos x} \, dx = \int_0^{\frac{\pi}{2}} \sqrt{\sin^2 t - \sin t} \, (-dt).
+$$
+化简后，利用三角恒等式和积分技巧，得到 $I = 2$。
+
+## 常见错误
+- 忽略隐含条件，如积分区间的对称性。
+- 错误使用积分公式，如将积分区间变换错误。
+- 忽略三角恒等式和积分技巧，导致计算错误。

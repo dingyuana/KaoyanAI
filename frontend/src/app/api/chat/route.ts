@@ -12,7 +12,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const backendResponse = await fetch('http://localhost:8001/chat', {
+    const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8001';
+    const backendResponse = await fetch(`${BACKEND_URL}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

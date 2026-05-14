@@ -3,24 +3,28 @@
 import asyncio
 import json
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import List, Optional
 
 from config import SUBJECTS, MOCK_MODE
-from wiki_retriever import get_subjects, list_concepts, retrieve_knowledge
-from llm import generate_response
-
-
-app = FastAPI(
-    title="考研助手后端API",
-    description="考研备考问答系统后端服务",
-    version="1.0.0"
+from wiki_retriever import get_subjects, list_concepts, retrieve_knowledge, get_concept_detail, get_related_exercises, get_subject_exercises
+from llm import generate_response, generate_response_stream
+from exceptions import (
+    KaoyanError,
+    SubjectNotFoundError,
+    InvalidInputError,
+    LLMServiceError,
 )
+from logging_config import get_logger
+from rate_limiter import rate_limiter
 
-# CORS — allow all origins for MVP dev
+logger = get_logger()
+
+app = FastAPI(title="考研助手后端API", description="考研备考问答系统后端服务", version="1.0.0")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,10 +34,49 @@ app.add_middleware(
 )
 
 
+@app.exception_handler(KaoyanError)
+async def kaoyan_error_handler(request: Request, exc: KaoyanError):
+    """Handle custom application errors with consistent JSON format."""
+    logger.warning(f"KaoyanError {exc.status_code}: {exc.message}")
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": exc.message,
+            "detail": exc.detail,
+            "status_code": exc.status_code,
+        },
+    )
+
+
+@app.exception_handler(Exception)
+async def general_error_handler(request: Request, exc: Exception):
+    """Catch-all for unhandled exceptions."""
+    logger.error(f"Unhandled error: {exc}", exc_info=True)
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "服务器内部错误，请稍后重试",
+            "status_code": 500,
+        },
+    )
+
+
 class ChatRequest(BaseModel):
     """Chat request model."""
     message: str
     subject: Optional[str] = None
+
+    @field_validator("message")
+    @classmethod
+    def validate_message(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise InvalidInputError("消息不能为空")
+        if len(v) > 2000:
+            raise InvalidInputError("消息过长，请控制在 2000 字以内")
+        return v
 
 
 class ChatResponse(BaseModel):
@@ -42,136 +85,156 @@ class ChatResponse(BaseModel):
     sources: List[str]
 
 
-class SubjectInfo(BaseModel):
-    """Subject info model."""
-    name: str
-    available: bool
+def _get_client_ip(request: Request) -> str:
+    """Extract client IP from request."""
+    forwarded = request.headers.get("X-Forwarded-For")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
 
 
 @app.get("/health")
-async def health_check():
+async def health_check(request: Request):
     """Health check endpoint."""
+    rate_limiter.check(_get_client_ip(request))
+    logger.info("Health check OK")
     return {"status": "ok"}
 
 
 @app.get("/subjects")
-async def get_subjects_endpoint():
-    """
-    Get list of available subjects from wiki directory.
-    """
+async def get_subjects_endpoint(request: Request):
+    """Get list of available subjects from wiki directory."""
+    rate_limiter.check(_get_client_ip(request))
+    logger.info("Fetching subjects")
     subjects = get_subjects()
-    return {
-        "subjects": subjects,
-        "count": len(subjects)
-    }
+    return {"subjects": subjects, "count": len(subjects)}
 
 
 @app.get("/concepts/{subject}")
-async def get_concepts(subject: str):
-    """
-    Get list of concepts for a specific subject.
-    
-    Args:
-        subject: Subject name (math, english, politics)
-        
-    Returns:
-        List of concept info
-    """
+async def get_concepts(subject: str, request: Request):
+    """Get list of concepts for a specific subject, grouped by chapter."""
+    rate_limiter.check(_get_client_ip(request))
+
     if subject not in SUBJECTS:
-        raise HTTPException(status_code=404, detail=f"Subject '{subject}' not found")
-    
+        raise SubjectNotFoundError(subject)
+
+    logger.info(f"Fetching concepts for subject: {subject}")
     concepts = list_concepts(subject)
-    
+
+    # Group concepts by chapter (first meaningful tag)
+    groups = {}
+    for c in concepts:
+        tags = c.get("tags", [])
+        chapter = "其他"
+        for t in tags:
+            if t in ("高等数学", "线性代数", "概率论与数理统计", "解题方法", "基础概念"):
+                chapter = t
+                break
+        if chapter not in groups:
+            groups[chapter] = []
+        groups[chapter].append(c)
+
     return {
         "subject": subject,
-        "concepts": concepts,
-        "count": len(concepts)
+        "groups": groups,
+        "count": len(concepts),
     }
 
 
 @app.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest):
-    """
-    Main chat endpoint for Q&A.
-    
-    1. Retrieve relevant knowledge from wiki
-    2. Build context from retrieved content
-    3. Generate response using LLM
-    4. Return answer + sources
-    
-    Args:
-        request: ChatRequest with message and optional subject filter
-        
-    Returns:
-        ChatResponse with answer and sources
-    """
-    if not request.message or len(request.message.strip()) == 0:
-        raise HTTPException(status_code=400, detail="Message cannot be empty")
-    
-    # Step 1: Retrieve relevant knowledge from wiki
-    knowledge = retrieve_knowledge(request.message, request.subject)
-    
-    # Step 2: Generate response using LLM
-    answer = generate_response(
-        context=knowledge["content"],
-        question=request.message
-    )
-    
-    # Step 3: Return answer with sources
-    return ChatResponse(
-        answer=answer,
-        sources=knowledge.get("sources", [])
-    )
+async def chat(request: ChatRequest, req: Request):
+    rate_limiter.check(_get_client_ip(req))
+    logger.info(f"Chat request: subject={request.subject}, message_len={len(request.message)}")
+
+    try:
+        knowledge = retrieve_knowledge(request.message, request.subject)
+        logger.info(f"Retrieved {len(knowledge.get('sources', []))} sources")
+        answer = generate_response(context=knowledge["content"], question=request.message)
+        logger.info(f"Generated response: {len(answer)} chars")
+        return ChatResponse(answer=answer, sources=knowledge.get("sources", []))
+    except KaoyanError:
+        raise
+    except Exception as e:
+        logger.error(f"Chat error: {e}")
+        raise LLMServiceError("生成回答时出错，请稍后重试")
 
 
 @app.post("/chat/stream")
-async def chat_stream(request: ChatRequest):
-    """
-    SSE streaming chat endpoint.
-    
-    Same as /chat but streams the response as SSE events:
-      data: {"type":"sources","sources":[...]}
-      data: {"type":"chunk","content":"..."}
-      data: {"type":"done"}
-    """
-    if not request.message or len(request.message.strip()) == 0:
-        raise HTTPException(status_code=400, detail="Message cannot be empty")
-    
-    knowledge = retrieve_knowledge(request.message, request.subject)
+async def chat_stream(request: ChatRequest, req: Request):
+    rate_limiter.check(_get_client_ip(req))
+    logger.info(f"Stream chat: subject={request.subject}, message_len={len(request.message)}")
+
+    try:
+        knowledge = retrieve_knowledge(request.message, request.subject)
+    except Exception as e:
+        logger.error(f"Knowledge retrieval failed: {e}")
+        raise LLMServiceError("检索知识库失败")
+
     sources = knowledge.get("sources", [])
     content = knowledge.get("content", "")
 
     async def event_stream():
-        # 1. Send sources
         yield f"data: {json.dumps({'type': 'sources', 'sources': sources}, ensure_ascii=False)}\n\n"
 
-        # 2. Generate and stream answer
-        answer = generate_response(context=content, question=request.message)
+        try:
+            async for chunk in generate_response_stream(context=content, question=request.message):
+                if chunk:
+                    yield f"data: {json.dumps({'type': 'chunk', 'content': chunk}, ensure_ascii=False)}\n\n"
+        except Exception as e:
+            logger.error(f"Stream generation error: {e}")
+            error_msg = "回答生成中断，请重试"
+            yield f"data: {json.dumps({'type': 'chunk', 'content': error_msg}, ensure_ascii=False)}\n\n"
 
-        if MOCK_MODE:
-            # Simulate streaming: send line-granularity chunks with short delay
-            lines = answer.split('\n')
-            for i, line in enumerate(lines):
-                if not line.strip():
-                    continue
-                payload = line + ('\n' if i < len(lines) - 1 else '')
-                yield f"data: {json.dumps({'type': 'chunk', 'content': payload}, ensure_ascii=False)}\n\n"
-                await asyncio.sleep(0.02)
-        else:
-            yield f"data: {json.dumps({'type': 'chunk', 'content': answer}, ensure_ascii=False)}\n\n"
-
-        # 3. Signal done
         yield f"data: {json.dumps({'type': 'done'})}\n\n"
 
-    return StreamingResponse(event_stream(), media_type="text/event-stream", headers={
-        "Cache-Control": "no-cache",
-        "Connection": "keep-alive",
-    })
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "Connection": "keep-alive"},
+    )
+
+
+@app.get("/concepts/{subject}/{concept_id}")
+async def get_concept_detail_route(subject: str, concept_id: str, request: Request):
+    rate_limiter.check(_get_client_ip(request))
+
+    if subject not in SUBJECTS:
+        raise SubjectNotFoundError(subject)
+
+    detail = get_concept_detail(subject, concept_id)
+    if detail is None:
+        raise InvalidInputError(f"概念 '{concept_id}' 不存在")
+
+    return detail
+
+
+@app.get("/concepts/{subject}/{concept_id}/exercises")
+async def get_related_exercises_route(subject: str, concept_id: str, request: Request):
+    rate_limiter.check(_get_client_ip(request))
+
+    if subject not in SUBJECTS:
+        raise SubjectNotFoundError(subject)
+
+    exercises = get_related_exercises(subject, concept_id)
+    return {"subject": subject, "concept_id": concept_id, "exercises": exercises, "count": len(exercises)}
+
+
+@app.get("/exercises/{subject}")
+async def get_exercises_route(subject: str, request: Request):
+    rate_limiter.check(_get_client_ip(request))
+
+    if subject not in SUBJECTS:
+        raise SubjectNotFoundError(subject)
+
+    result = get_subject_exercises(subject)
+    result["subject"] = subject
+    return result
 
 
 @app.get("/")
-async def root():
+async def root(request: Request):
     """Root endpoint with API info."""
+    rate_limiter.check(_get_client_ip(request))
     return {
         "name": "考研助手后端API",
         "version": "1.0.0",
@@ -179,8 +242,12 @@ async def root():
             "health": "GET /health",
             "subjects": "GET /subjects",
             "concepts": "GET /concepts/{subject}",
-            "chat": "POST /chat"
-        }
+            "concept_detail": "GET /concepts/{subject}/{concept_id}",
+            "related_exercises": "GET /concepts/{subject}/{concept_id}/exercises",
+            "exercises": "GET /exercises/{subject}",
+            "chat": "POST /chat",
+            "chat_stream": "POST /chat/stream",
+        },
     }
 
 

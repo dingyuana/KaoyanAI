@@ -1,0 +1,50 @@
+---
+id: L3-math-concept-概率论与数理统计-第14讲
+title: 概率论与数理统计-第14讲
+subject: math
+type: concept
+level: 3
+tags: ['概率论与数理统计']
+source_anchors: ['RAW-math-概率论-P034-concept']
+created: 2026-05-09
+---
+
+> 引用自 [[RAW-math-概率论-P034-concept]]
+
+# 概率论与数理统计-第14讲
+
+**来源：** 概率论与数理统计第14讲
+
+```markdown
+# 概率论与数理统计-第14讲：随机事件和概率
+
+## 核心概念定义
+
+随机事件是指在随机试验中可能发生也可能不发生的事件。概率是描述随机事件发生可能性大小的数值。
+
+## 核心公式
+
+```latex
+P(AB) + P(ABC) + P'(ABO) \geq P(A) + P(B) + P(C)
+P(AB) = P(A) + P(B) - P(A \cup B)
+P(A \cap B) = P(A) + P(B) - P(A \cup B)
+```
+
+## 典型例题
+
+**例1.6** 设 \(X, Y\) 为连续型随机变量，且 \(P\{X \geq 0, Y \geq 0\} = 3\), \(P\{X \geq 0\} = P\{Y \geq 0\} = 4\), 求下列事件的概率：
+
+1. \(A = \{max\{X, Y\} \geq 0\}\)
+2. \(B = \{max\{X, Y\} \geq 0, min\{X, Y\} < 0\}\)
+
+**解**：
+
+1. 由于 \(A = \{max\{X, Y\} \geq 0\}\) 是 \(X, Y\) 至少有一个大于等于0的事件，故 \(P(A) = P\{X \geq 0\} + P\{Y \geq 0\} - P\{X \geq 0, Y \geq 0\} = 4 + 4 - 3 = 5\).
+2. 用全集分解 \(B\)，得 \(B = \{max\{X, Y\} \geq 0\} \cap (\{min\{X, Y\} < 0\} \cup \{min\{X, Y\} \geq 0\}) = B \cup \{X \geq 0, Y \geq 0\}\)，故 \(P(B) = P(B) - P\{X \geq 0, Y \geq 0\} = 5 - 3 = 2\).
+
+## 常见错误
+
+1. 忽略随机事件之间的独立性。
+2. 错误地使用概率公式。
+3. 忽略随机变量的连续性。
+```
