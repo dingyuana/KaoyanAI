@@ -19,6 +19,21 @@ entries:
   - INDEX-raw-math-C02-高数_P001
   uncertainty: false
   processed_to_L3: L3-math-concept-随机事件与概率
+- anchor: INDEX-math-concept-极限
+  type: concept
+  title: 极限
+  chapter: 高等数学
+  raw_concepts:
+  - 极限
+  - 三向解题法OPD
+  perspective: 基础概念
+  source: L3生成
+  related:
+  - INDEX-math-concept-数列极限
+  - INDEX-math-concept-导数与微分
+  - INDEX-math-concept-积分的概念与计算
+  uncertainty: false
+  processed_to_L3: L3-math-concept-极限
 - anchor: INDEX-math-concept-数列极限
   type: concept
   title: 数列极限
