@@ -1,0 +1,4 @@
+# backend/Dockerfile.dev
+# 基于已有镜像，只改启动命令，无需重新安装依赖
+FROM kaoyan_backend:latest
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

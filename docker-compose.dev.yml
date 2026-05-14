@@ -1,0 +1,59 @@
+# kaoyan 开发环境（唯一运行环境）
+# 启动: docker-compose -f docker-compose.dev.yml -p kaoyan up
+# 停止: docker-compose -f docker-compose.dev.yml -p kaoyan down
+# 日志: docker-compose -f docker-compose.dev.yml -p kaoyan logs -f
+
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./backend:/app
+      - ./wiki:/root/kaoyan/wiki:ro
+    environment:
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.openai.com/v1}
+      - LLM_MODEL=${LLM_MODEL:-gpt-4o-mini}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - kaoyan
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3003:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - kaoyan
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8082:80"
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - kaoyan
+
+networks:
+  kaoyan:
+    driver: bridge

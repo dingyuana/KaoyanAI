@@ -1,0 +1,6 @@
+FROM kaoyan_frontend:latest
+WORKDIR /app
+# standalone 镜像缺少 devDependencies，重新安装
+COPY package*.json ./
+RUN npm install
+CMD ["npm", "run", "dev", "--", "-H", "0.0.0.0"]
