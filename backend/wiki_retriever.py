@@ -296,7 +296,11 @@ def _extract_ngrams(text: str, min_n: int = 2, max_n: int = 4) -> list:
 
 
 def _is_relevant(content: str, query: str) -> bool:
-    """Check if content is relevant to query."""
+    """Check if content is relevant to query.
+    
+    Uses keyword coverage threshold to avoid false positives from
+    common characters appearing in unrelated content.
+    """
     query_lower = query.lower().strip()
     content_lower = content.lower()
 
@@ -305,6 +309,10 @@ def _is_relevant(content: str, query: str) -> bool:
 
     if query_lower in content_lower:
         return True
+
+    # Content too short → likely a fragment, skip
+    if len(content_lower) < 100:
+        return False
 
     tokens = re.split(r'[\s,，。！？、；;：:（）()\[\]【】""''…—]+', query_lower)
     tokens = [t.strip() for t in tokens if len(t.strip()) > 1]
@@ -319,7 +327,9 @@ def _is_relevant(content: str, query: str) -> bool:
         return False
 
     matches = sum(1 for k in keywords if k in content_lower)
-    return matches >= 1 or (matches / len(keywords) >= 0.3)
+    # Require BOTH minimum match count AND reasonable coverage
+    # This prevents single-character hits from unrelated content
+    return matches >= 2 and (matches / len(keywords) >= 0.4)
 
 
 def get_subjects() -> List[str]:
