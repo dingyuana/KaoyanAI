@@ -26,20 +26,11 @@ def generate_response(context: str, question: str) -> str:
 def _mock_response(context: str, question: str) -> str:
     """
     Mock response for MVP when no API key is available.
-    Returns retrieved content formatted nicely.
     """
     if not context:
         return "抱歉，知识库中暂时没有找到相关信息。请尝试更换关键词或稍后再试。"
-    
-    lines = []
-    lines.append(f"根据知识库中的资料，针对您的问题给出以下回答：")
-    lines.append("")
-    lines.append(context)
-    lines.append("")
-    lines.append("---")
-    lines.append("⚠️ 这是一个模拟回复，实际使用时请配置 LLM_API_KEY 环境变量。")
-    
-    return "\n".join(lines)
+    # Return first 2000 chars of the cleanest matching content
+    return context.strip()[:2000]
 
 
 def _call_llm(context: str, question: str) -> str:

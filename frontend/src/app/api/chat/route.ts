@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const backendResponse = await fetch('http://localhost:8000/chat', {
+    const backendResponse = await fetch('http://localhost:8001/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

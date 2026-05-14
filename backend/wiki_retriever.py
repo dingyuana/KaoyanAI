@@ -138,67 +138,83 @@ def _search_subject(subject: str, query: str, schema: Dict[str, str]) -> tuple:
     results = []
     sources = []
     
-    # Add schema context to results
-    if schema.get("SCHEMA.md"):
-        # Extract key terms from schema that match query
-        schema_keywords = _extract_keywords(schema["SCHEMA.md"])
-        query_keywords = _extract_keywords(query)
-        
-        # Check for keyword matches
-        for keyword in query_keywords:
-            if keyword in schema_keywords or keyword in query.lower():
-                results.append(f"【{subject.upper()} 学科说明】\n{schema['SCHEMA.md'][:500]}")
-                sources.append(f"{subject}/SCHEMA.md")
-                break
-    
-    # Search L3 concepts
+    MAX_L3_RESULTS = 3
+
+    # Search L3 concepts first (highest priority)
     l3_path = os.path.join(WIKI_PATH, subject, "L3")
     if os.path.exists(l3_path):
         for root, dirs, files in os.walk(l3_path):
             for file in files:
-                if file.endswith('.md'):
-                    file_path = os.path.join(root, file)
-                    content = read_file(file_path)
-                    
-                    # Simple relevance check
-                    if _is_relevant(content, query):
-                        results.append(f"【{file}】\n{content[:2000]}")
-                        sources.append(f"{subject}/L3/{file}")
-    
-    # Search INDEX.yaml
-    index_path = os.path.join(WIKI_PATH, subject, "INDEX.yaml")
-    if os.path.exists(index_path):
-        index_content = read_file(index_path)
-        if _is_relevant(index_content, query):
-            results.append(f"【{subject}/INDEX.yaml】\n{index_content[:2000]}")
-            sources.append(f"{subject}/INDEX.yaml")
+                if not file.endswith('.md'):
+                    continue
+                if len([s for s in sources if s.startswith(f"{subject}/L3/")]) >= MAX_L3_RESULTS:
+                    break
+                file_path = os.path.join(root, file)
+                content = read_file(file_path)
+                if _is_relevant(content, query):
+                    # Strip YAML frontmatter (---...---)
+                    clean = re.sub(r'^---.*?---\s*', '', content, flags=re.DOTALL)
+                    results.append(clean[:2000].strip())
+                    sources.append(f"{subject}/L3/{file}")
+            else:
+                continue
+            break
+
+    # Only add schema/INDEX if no L3 results found (fallback)
+    if not results:
+        if schema.get("SCHEMA.md") and _is_relevant(schema["SCHEMA.md"], query):
+            results.append(f"【{subject.upper()} 学科说明】\n{schema['SCHEMA.md'][:500]}")
+            sources.append(f"{subject}/SCHEMA.md")
+        
+        index_path = os.path.join(WIKI_PATH, subject, "INDEX.yaml")
+        if os.path.exists(index_path):
+            index_content = read_file(index_path)
+            if _is_relevant(index_content, query):
+                results.append(f"【{subject}/INDEX.yaml】\n{index_content[:2000]}")
+                sources.append(f"{subject}/INDEX.yaml")
     
     return results, sources
 
 
-def _extract_keywords(text: str) -> List[str]:
-    """Extract key terms from text."""
-    # Remove markdown formatting
-    text = re.sub(r'[#*`\[\]()]', '', text)
-    # Split and filter
-    words = text.split()
-    return [w for w in words if len(w) > 1]
+def _extract_ngrams(text: str, min_n: int = 2, max_n: int = 4) -> list:
+    """Extract character n-grams from Chinese text for fuzzy matching."""
+    results = []
+    n = len(text)
+    for size in range(min_n, min(max_n + 1, n + 1)):
+        for i in range(n - size + 1):
+            gram = text[i:i + size]
+            if len(gram) >= min_n:
+                results.append(gram)
+    return results
 
 
 def _is_relevant(content: str, query: str) -> bool:
     """Check if content is relevant to query."""
-    query_lower = query.lower()
+    query_lower = query.lower().strip()
     content_lower = content.lower()
-    
-    # Extract query keywords
-    query_words = set(_extract_keywords(query_lower))
-    
-    # Check for matches
-    content_words = set(_extract_keywords(content_lower))
-    
-    # At least one keyword match
-    common = query_words & content_words
-    return len(common) > 0 or any(word in content_lower for word in query_words)
+
+    # Direct substring match
+    if query_lower in content_lower:
+        return True
+
+    # Split into tokens by punctuation/whitespace
+    tokens = re.split(r'[\s,，。！？、；;：:（）()\[\]【】""''…—]+', query_lower)
+    tokens = [t.strip() for t in tokens if len(t.strip()) > 1]
+
+    # Collect all keywords: original tokens + character bigrams/trigrams
+    keywords = set(tokens)
+    for t in tokens:
+        if len(t) > 2:
+            for g in _extract_ngrams(t, 2, 4):
+                keywords.add(g)
+
+    if not keywords:
+        return False
+
+    # A match counts if any keyword appears in the content
+    matches = sum(1 for k in keywords if k in content_lower)
+    # Pass if at least one keyword matches, or 30%+ match rate
+    return matches >= 1 or (matches / len(keywords) >= 0.3)
 
 
 def get_subjects() -> List[str]:

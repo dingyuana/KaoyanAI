@@ -1,10 +1,15 @@
 """FastAPI application for kaoyan Q&A system."""
 
+import asyncio
+import json
+
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List, Optional
 
-from config import SUBJECTS
+from config import SUBJECTS, MOCK_MODE
 from wiki_retriever import get_subjects, list_concepts, retrieve_knowledge
 from llm import generate_response
 
@@ -13,6 +18,15 @@ app = FastAPI(
     title="考研助手后端API",
     description="考研备考问答系统后端服务",
     version="1.0.0"
+)
+
+# CORS — allow all origins for MVP dev
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -108,6 +122,51 @@ async def chat(request: ChatRequest):
         answer=answer,
         sources=knowledge.get("sources", [])
     )
+
+
+@app.post("/chat/stream")
+async def chat_stream(request: ChatRequest):
+    """
+    SSE streaming chat endpoint.
+    
+    Same as /chat but streams the response as SSE events:
+      data: {"type":"sources","sources":[...]}
+      data: {"type":"chunk","content":"..."}
+      data: {"type":"done"}
+    """
+    if not request.message or len(request.message.strip()) == 0:
+        raise HTTPException(status_code=400, detail="Message cannot be empty")
+    
+    knowledge = retrieve_knowledge(request.message, request.subject)
+    sources = knowledge.get("sources", [])
+    content = knowledge.get("content", "")
+
+    async def event_stream():
+        # 1. Send sources
+        yield f"data: {json.dumps({'type': 'sources', 'sources': sources}, ensure_ascii=False)}\n\n"
+
+        # 2. Generate and stream answer
+        answer = generate_response(context=content, question=request.message)
+
+        if MOCK_MODE:
+            # Simulate streaming: send line-granularity chunks with short delay
+            lines = answer.split('\n')
+            for i, line in enumerate(lines):
+                if not line.strip():
+                    continue
+                payload = line + ('\n' if i < len(lines) - 1 else '')
+                yield f"data: {json.dumps({'type': 'chunk', 'content': payload}, ensure_ascii=False)}\n\n"
+                await asyncio.sleep(0.02)
+        else:
+            yield f"data: {json.dumps({'type': 'chunk', 'content': answer}, ensure_ascii=False)}\n\n"
+
+        # 3. Signal done
+        yield f"data: {json.dumps({'type': 'done'})}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream", headers={
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+    })
 
 
 @app.get("/")

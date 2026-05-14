@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  basePath: '/kaoyan',
+  allowedDevOrigins: ['129.211.7.254'],
 };
 
 export default nextConfig;
