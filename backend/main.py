@@ -34,6 +34,15 @@ app.add_middleware(
 )
 
 
+@app.middleware
+async def request_logging_middleware(request: Request, call_next):
+    client_ip = _get_client_ip(request)
+    user_agent = request.headers.get("user-agent", "unknown")
+    logger.info(f"{request.method} {request.url.path} | client_ip={client_ip} | user_agent={user_agent}")
+    response = await call_next(request)
+    return response
+
+
 @app.exception_handler(KaoyanError)
 async def kaoyan_error_handler(request: Request, exc: KaoyanError):
     """Handle custom application errors with consistent JSON format."""
@@ -42,9 +51,11 @@ async def kaoyan_error_handler(request: Request, exc: KaoyanError):
     return JSONResponse(
         status_code=exc.status_code,
         content={
-            "error": exc.message,
-            "detail": exc.detail,
-            "status_code": exc.status_code,
+            "error": {
+                "code": exc.error_code,
+                "message": exc.message,
+                "detail": exc.detail,
+            },
         },
     )
 
@@ -63,6 +74,12 @@ async def general_error_handler(request: Request, exc: Exception):
     )
 
 
+@app.on_event("startup")
+async def startup_event():
+    if MOCK_MODE:
+        print("注意：未配置 LLM_API_KEY，系统运行在 Mock 模式")
+
+
 class ChatRequest(BaseModel):
     """Chat request model."""
     message: str
@@ -74,8 +91,10 @@ class ChatRequest(BaseModel):
         v = v.strip()
         if not v:
             raise InvalidInputError("消息不能为空")
-        if len(v) > 2000:
-            raise InvalidInputError("消息过长，请控制在 2000 字以内")
+        if len(v) > 1000:
+            raise InvalidInputError("消息过长，请控制在 1000 字以内")
+        if "<script>" in v.lower():
+            raise InvalidInputError("消息包含非法字符")
         return v
 
 
