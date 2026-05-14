@@ -4,6 +4,7 @@ title: 三向解题法OPD-高数
 subject: math
 type: method
 level: 3
+searchable: false
 tags: [解题方法, 高等数学]
 related:
   - concepts/极限的概念.md

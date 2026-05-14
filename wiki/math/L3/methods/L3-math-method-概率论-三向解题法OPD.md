@@ -5,6 +5,7 @@ subject: math
 type: method
 level: 3
 tags: [解题方法, 概率论]
+searchable: false
 related:
   - concepts/极限的概念.md
   - methods/反向思路.md

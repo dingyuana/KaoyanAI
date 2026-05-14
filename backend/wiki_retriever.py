@@ -72,6 +72,9 @@ def _get_l3_files(subject: str) -> List[Dict[str, Any]]:
             file_path = os.path.join(root, f)
             content = read_file(file_path)
             fm, body = _parse_frontmatter(content)
+            # Skip files marked as non-searchable
+            if fm.get("searchable") is False:
+                continue
             files.append({
                 "id": f.replace('.md', ''),
                 "file_path": file_path,
@@ -263,6 +266,9 @@ def _search_subject(subject: str, query: str, schema: Dict[str, str]) -> tuple:
                     break
                 file_path = os.path.join(root, file)
                 content = read_file(file_path)
+                fm, _ = _parse_frontmatter(content)
+                if fm.get("searchable") is False:
+                    continue
                 if _is_relevant(content, query):
                     clean = re.sub(r'^---.*?---\s*', '', content, flags=re.DOTALL)
                     results.append(clean[:2000].strip())

@@ -4,6 +4,7 @@ title: 三向解题法（OPD）概述
 subject: math
 type: concept
 level: 3
+searchable: false
 tags: [方法论, 解题框架, OPD]
 related:
   - methods/三向解题法OPD-高数.md

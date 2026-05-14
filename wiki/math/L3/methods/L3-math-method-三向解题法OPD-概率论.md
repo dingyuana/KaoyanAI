@@ -4,6 +4,7 @@ title: 三向解题法（OPD）-概率论
 subject: math
 type: method
 level: 3
+searchable: false
 tags: [三向解题法, OPD, 方法论]
 related:
   - concepts/极限的概念与性质.md
