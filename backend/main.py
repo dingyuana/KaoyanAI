@@ -78,6 +78,9 @@ async def general_error_handler(request: Request, exc: Exception):
 async def startup_event():
     if MOCK_MODE:
         print("注意：未配置 LLM_API_KEY，系统运行在 Mock 模式")
+    else:
+        from config import LLM_MODEL, LLM_BASE_URL
+        print(f"LLM 已连接: {LLM_MODEL} @ {LLM_BASE_URL}")
 
 
 class ChatRequest(BaseModel):

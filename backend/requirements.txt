@@ -2,3 +2,4 @@ fastapi
 uvicorn[standard]
 PyYAML
 httpx
+python-dotenv

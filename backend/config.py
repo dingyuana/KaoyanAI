@@ -1,6 +1,16 @@
 """Configuration for kaoyan backend."""
 
 import os
+from pathlib import Path
+
+# Load .env file if present
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent / '.env'
+    if env_path.exists():
+        load_dotenv(env_path)
+except ImportError:
+    pass
 
 # Wiki knowledge base path
 WIKI_PATH = "/root/kaoyan/wiki"

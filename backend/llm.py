@@ -57,6 +57,12 @@ def _build_prompt(context: str, question: str) -> list:
     ]
 
 
+def _strip_think_tags(text: str) -> str:
+    """Remove <think>...</think> reasoning tags from model output."""
+    import re
+    return re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL).strip()
+
+
 def generate_response(context: str, question: str) -> str:
     """
     Generate response using LLM (sync, non-streaming).
@@ -70,7 +76,7 @@ def generate_response(context: str, question: str) -> str:
     """
     if MOCK_MODE:
         return _mock_response(context, question)
-    return _call_llm_sync(context, question)
+    return _strip_think_tags(_call_llm_sync(context, question))
 
 
 def _mock_response(context: str, question: str) -> str:
@@ -196,6 +202,7 @@ async def _call_llm_stream(context: str, question: str) -> AsyncIterator[str]:
 
     Uses httpx.AsyncClient to stream the response token by token
     from OpenAI-compatible chat completion API.
+    Strips <think>...</think> reasoning tags from the output.
 
     Yields:
         Content delta from each streaming chunk
@@ -221,6 +228,9 @@ async def _call_llm_stream(context: str, question: str) -> AsyncIterator[str]:
         "stream": True,
     }
 
+    buffer = ""
+    in_think = False
+
     try:
         async with httpx.AsyncClient(timeout=STREAM_TIMEOUT) as client:
             async with client.stream(
@@ -241,11 +251,11 @@ async def _call_llm_stream(context: str, question: str) -> AsyncIterator[str]:
                     return
 
                 # Parse SSE stream: data: {"choices":[{"delta":{"content":"..."}}]}
-                buffer = ""
+                sse_buffer = ""
                 async for chunk in response.aiter_text():
-                    buffer += chunk
-                    while '\n' in buffer:
-                        line, buffer = buffer.split('\n', 1)
+                    sse_buffer += chunk
+                    while '\n' in sse_buffer:
+                        line, sse_buffer = sse_buffer.split('\n', 1)
                         line = line.strip()
                         if not line or not line.startswith('data:'):
                             continue
@@ -256,8 +266,35 @@ async def _call_llm_stream(context: str, question: str) -> AsyncIterator[str]:
                             data = json.loads(data_str)
                             delta = data.get("choices", [{}])[0].get("delta", {})
                             content = delta.get("content", "")
-                            if content:
-                                yield content
+                            if not content:
+                                continue
+
+                            # Filter out <think>...</think> content
+                            buffer += content
+                            while buffer:
+                                if not in_think:
+                                    # Look for opening tag
+                                    idx = buffer.find('<think>')
+                                    if idx == -1:
+                                        # No tag at all — yield everything
+                                        yield buffer
+                                        buffer = ""
+                                    else:
+                                        # Yield text before <think>
+                                        if idx > 0:
+                                            yield buffer[:idx]
+                                        buffer = buffer[idx + 7:]  # skip '<think>'
+                                        in_think = True
+                                else:
+                                    # Look for closing tag
+                                    idx = buffer.find('</think>')
+                                    if idx == -1:
+                                        # Still inside think, discard
+                                        buffer = ""
+                                    else:
+                                        # Skip content between tags, continue after
+                                        buffer = buffer[idx + 8:]  # skip '</think>'
+                                        in_think = False
                         except json.JSONDecodeError:
                             continue
 
