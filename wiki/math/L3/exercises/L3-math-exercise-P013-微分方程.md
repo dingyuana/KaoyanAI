@@ -8,6 +8,7 @@ tags: [高等数学, 数学二, 基础篇]
 difficulty: 简单
 source_anchors:
   - raw/exams/基础篇_微分方程.md
+related: []
 created: 2026-05-09
 ---
 

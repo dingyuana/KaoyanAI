@@ -9,6 +9,8 @@ related:
   - methods/概率论-正向思路.md
   - methods/概率论-反向思路.md
   - methods/概率论-掀被子法.md
+source_anchors:
+  - RAW-math-概率论-P085-concept
 created: 2026-05-09
 ---
 

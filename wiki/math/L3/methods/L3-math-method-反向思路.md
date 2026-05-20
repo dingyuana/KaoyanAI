@@ -9,14 +9,14 @@ related:
   - concepts/极限的概念.md
   - methods/反向思路.md
   - methods/三向解题法OPD.md
-source_anchors: [RAW-math-高数-P001-C01]
+source_anchors:
+  - RAW-math-高数-P001-C01
 created: 2026-05-09
 ---
 
 # 反向思路
 
 > 引用自 [[RAW-math-高数-P001-C01]]
-
 
 # 检索思路：反向思路
 

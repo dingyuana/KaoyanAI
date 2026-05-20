@@ -8,6 +8,8 @@ tags: [高等数学, 基础概念, 导数, 微分]
 related:
   - methods/正向思路.md
   - methods/盯住目标.md
+source_anchors:
+  - RAW-math-高数-P031-concept
 created: 2026-05-09
 ---
 

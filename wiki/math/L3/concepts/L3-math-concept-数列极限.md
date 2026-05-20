@@ -9,6 +9,8 @@ related:
   - methods/正向思路.md
   - methods/反向思路.md
   - methods/三向解题法详解.md
+source_anchors:
+  - RAW-math-高数-P137-concept
 created: 2026-05-09
 ---
 

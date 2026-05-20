@@ -5,7 +5,9 @@ subject: math
 type: concept
 level: 3
 tags: ['线性代数']
-source_anchors: ['RAW-math-线代-P009-concept']
+source_anchors:
+  - RAW-math-线代-P009-concept
+related: []
 created: 2026-05-09
 ---
 

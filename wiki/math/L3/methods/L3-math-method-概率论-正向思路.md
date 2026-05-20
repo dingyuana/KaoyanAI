@@ -9,14 +9,14 @@ related:
   - concepts/极限的概念.md
   - methods/反向思路.md
   - methods/三向解题法OPD.md
-source_anchors: [RAW-math-概率论-P001-C03]
+source_anchors:
+  - RAW-math-概率论-P001-C03
 created: 2026-05-09
 ---
 
 # 概率论-正向思路
 
 > 引用自 [[RAW-math-概率论-P001-C03]]
-
 
 # 概率论与数理统计解题思路概述
 

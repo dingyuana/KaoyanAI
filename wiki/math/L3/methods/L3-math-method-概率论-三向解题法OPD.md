@@ -10,14 +10,14 @@ related:
   - concepts/极限的概念.md
   - methods/反向思路.md
   - methods/三向解题法OPD.md
-source_anchors: [RAW-math-概率论-P001-C05]
+source_anchors:
+  - RAW-math-概率论-P001-C05
 created: 2026-05-09
 ---
 
 # 概率论-三向解题法OPD
 
 > 引用自 [[RAW-math-概率论-P001-C05]]
-
 
 # 三向解题法（OPD）
 

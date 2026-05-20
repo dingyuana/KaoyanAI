@@ -8,6 +8,7 @@ tags: [线性代数, 数学二, 强化篇]
 difficulty: 中等
 source_anchors:
   - raw/exams/强化篇_行列式.md
+related: []
 created: 2026-05-09
 ---
 

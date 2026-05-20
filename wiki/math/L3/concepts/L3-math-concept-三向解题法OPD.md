@@ -6,7 +6,9 @@ type: concept
 level: 3
 searchable: false
 tags: ['三向解题法', '解题方法']
-source_anchors: ['RAW-math-高数-P039-concept']
+source_anchors:
+  - RAW-math-高数-P039-concept
+related: []
 created: 2026-05-09
 ---
 

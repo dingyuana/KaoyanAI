@@ -5,7 +5,9 @@ subject: math
 type: concept
 level: 3
 tags: ['基础概念']
-source_anchors: ['RAW-math-高数-P119-concept']
+source_anchors:
+  - RAW-math-高数-P119-concept
+related: []
 created: 2026-05-09
 ---
 

@@ -31,15 +31,13 @@ export function ConceptDetail({ detail }: ConceptDetailProps) {
 
   useEffect(() => {
     let cancelled = false;
-    setExLoading(true);
     import('@/lib/api').then(({ fetchRelatedExercises }) => {
       fetchRelatedExercises(detail.subject, detail.id).then((data) => {
         if (!cancelled) {
           setExercises(data);
-          setExLoading(false);
         }
       }).catch(() => {
-        if (!cancelled) setExLoading(false);
+        if (!cancelled) {}
       });
     });
     return () => { cancelled = true; };

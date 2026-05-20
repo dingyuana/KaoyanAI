@@ -35,7 +35,7 @@ export default function ConceptsPage() {
     try {
       const data = await fetchConceptDetail('math', id);
       setDetail(data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setDetail(null);
     } finally {
       setDetailLoading(false);

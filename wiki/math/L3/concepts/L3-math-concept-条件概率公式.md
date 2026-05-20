@@ -5,7 +5,9 @@ subject: math
 type: concept
 level: 3
 tags: ['基础概念', '概率论与数理统计']
-source_anchors: ['RAW-math-概率论-P027-concept']
+source_anchors:
+  - RAW-math-概率论-P027-concept
+related: []
 created: 2026-05-09
 ---
 

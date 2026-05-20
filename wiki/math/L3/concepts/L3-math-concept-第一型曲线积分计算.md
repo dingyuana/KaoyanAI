@@ -5,7 +5,9 @@ subject: math
 type: concept
 level: 3
 tags: ['高等数学']
-source_anchors: ['RAW-math-高数-P168-concept']
+source_anchors:
+  - RAW-math-高数-P168-concept
+related: []
 created: 2026-05-09
 ---
 

@@ -9,6 +9,8 @@ related:
   - methods/正向思路.md
   - methods/反向思路.md
   - methods/盯住目标.md
+source_anchors:
+  - RAW-math-高数-P051-concept
 created: 2026-05-09
 ---
 

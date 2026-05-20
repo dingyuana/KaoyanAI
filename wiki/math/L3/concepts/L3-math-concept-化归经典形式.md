@@ -7,6 +7,7 @@ level: 3
 tags: ['概率论与数理统计', '基础概念']
 source_anchors:
   - RAW-math-概率论-P022-concept
+related: []
 created: 2026-05-09
 ---
 

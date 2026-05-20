@@ -11,7 +11,7 @@
 kaoyan/
 ├── backend/              # 后端服务（FastAPI）
 ├── frontend/             # 前端应用（Next.js 16）
-├── wiki/                 # 知识库（942 文件）
+├── wiki/                 # 知识库（737 文件）
 ├── docs/                 # 开发文档
 ├── scripts/              # 工具脚本（待填充）
 └── nginx/                # 反向代理配置（待创建）
@@ -191,7 +191,7 @@ MOCK_MODE        # 自动判断（Key 为空时 true）
 | `math/AGENT.md` | Domain AI 约束 | ✅ 完成 |
 | `math/INDEX.yaml` | L2 索引 | ✅ 完成 |
 | `math/raw/` | L1 原始材料 | ✅ 465 文件 |
-| `math/L3/concepts/` | L3 概念文档 | ✅ 421 文件 |
+| `math/L3/concepts/` | L3 概念文档 | ✅ 208 文件 |
 | `math/L3/methods/` | L3 方法文档 | ✅ 17 文件 |
 | `math/L3/exercises/` | L3 习题文档 | ✅ 30 文件 |
 | `math/TEMPLATES/` | 文件模板 | ✅ 完成 |

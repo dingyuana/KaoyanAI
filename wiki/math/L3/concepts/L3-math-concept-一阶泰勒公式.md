@@ -7,6 +7,7 @@ level: 3
 tags: [微积分, 泰勒公式, 近似]
 source_anchors:
   - RAW-math-高数-P037-concept
+related: []
 created: 2026-05-09
 ---
 

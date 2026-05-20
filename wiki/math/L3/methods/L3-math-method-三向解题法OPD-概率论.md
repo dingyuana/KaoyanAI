@@ -8,7 +8,8 @@ searchable: false
 tags: [三向解题法, OPD, 方法论]
 related:
   - concepts/极限的概念与性质.md
-source_anchors: [RAW-math-概率论-P001-C05]
+source_anchors:
+  - RAW-math-概率论-P001-C05
 created: 2026-05-09
 ---
 
@@ -17,7 +18,6 @@ created: 2026-05-09
 ## 形式化定义
 
 > 引用自 [[RAW-math-概率论-P001-C05]]
-
 
 # 三向解题法（OPD）
 

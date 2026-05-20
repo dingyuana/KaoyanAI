@@ -7,6 +7,7 @@ level: 3
 tags: [相似矩阵, 对角化, 特征值, 特征向量, 正交矩阵, 实对称矩阵, 矩阵的秩, 行列式, 伴随矩阵, 初等矩阵]
 source_anchors:
   - RAW-math-线代-P014-concept
+related: []
 created: 2026-05-09
 ---
 

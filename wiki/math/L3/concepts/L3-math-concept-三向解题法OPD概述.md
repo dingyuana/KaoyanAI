@@ -10,6 +10,8 @@ related:
   - methods/三向解题法OPD-高数.md
   - methods/三向解题法详解.md
   - methods/概率论-三向解题法OPD.md
+source_anchors:
+  - RAW-math-高数-P039-concept
 created: 2026-05-09
 ---
 

@@ -2,8 +2,8 @@
 type KatexType = typeof import('katex');
 
 function getKatex(): KatexType {
-  if (typeof window !== 'undefined' && (window as any).katex) {
-    return (window as any).katex as KatexType;
+  if (typeof window !== 'undefined' && (window as Window & { katex?: KatexType }).katex) {
+    return (window as Window & { katex?: KatexType }).katex as KatexType;
   }
   // Server-side rendering fallback: return mock
   return {
@@ -132,7 +132,7 @@ export function renderMarkdown(text: string): string {
     if (inList) { out.push(listType === 'ul' ? '</ul>' : '</ol>'); inList = false; listType = null; }
 
     // Process inline formatting for paragraph text
-    let para = trimmed
+    const para = trimmed
       .replace(/`([^`]+)`/g, '<code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs font-mono text-pink-600 dark:text-pink-400">$1</code>')
       .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold">$1</strong>')
       .replace(/\*(.+?)\*/g, '<em>$1</em>')

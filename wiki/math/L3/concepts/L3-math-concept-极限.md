@@ -9,6 +9,8 @@ related:
   - concepts/数列极限.md
   - concepts/导数与微分.md
   - concepts/积分的概念与计算.md
+source_anchors:
+  - RAW-math-高数-P052-concept
 created: 2026-05-15
 ---
 

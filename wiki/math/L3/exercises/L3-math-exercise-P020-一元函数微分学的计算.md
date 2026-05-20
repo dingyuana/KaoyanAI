@@ -8,6 +8,7 @@ tags: [高等数学, 数学二, 强化篇]
 difficulty: 中等
 source_anchors:
   - raw/exams/强化篇_一元函数微分学的计算.md
+related: []
 created: 2026-05-09
 ---
 

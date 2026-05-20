@@ -58,7 +58,7 @@
 │                          ↓                                    │
 │  ┌─────────────────────────────────────────────────────────┐  │
 │  │                    Wiki 知识库 (文件系统)                │  │
-│  │  wiki/math/L3/concepts/  (421 个概念)                   │  │
+│  │  wiki/math/L3/concepts/  (208 个概念)                   │  │
 │  │  wiki/math/L3/methods/   (17 个方法)                    │  │
 │  │  wiki/math/L3/exercises/ (30 个习题)                    │  │
 │  │  wiki/math/raw/          (465 个原始材料)               │  │
@@ -181,7 +181,7 @@ retrieve_knowledge(question, subject)
 |-----------------|---------|------|
 | 单文件 FastAPI | 模块化（4 文件） | 更好的关注点分离 |
 | 单页 HTML | Next.js 16 全栈 | 更完善的开发体验 |
-| 20-30 个 L3 文件 | 468 个 L3 文件 | 知识库远超预期 |
+| 20-30 个 L3 文件 | 255 个 L3 文件 | 知识库远超预期 |
 | Vanilla JS | React + TypeScript | 类型安全 |
 | Railway 部署 | 待配置 | 尚未部署 |
 | 非流式优先 | 流式优先 | 更好的用户体验 |

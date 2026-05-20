@@ -43,6 +43,7 @@ export function ChatInterface() {
   const streamRef = useRef<StreamMessage | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const idCounterRef = useRef<number>(0);
 
   const scrollToBottom = useCallback(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
