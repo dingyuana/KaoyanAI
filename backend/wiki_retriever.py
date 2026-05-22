@@ -2,19 +2,59 @@
 
 import os
 import re
+import time
+from collections import OrderedDict
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 from config import WIKI_PATH, SUBJECTS
 
 
+# --- TTL cache for read_file ---
+_FILE_CACHE: OrderedDict[str, tuple[str, float]] = OrderedDict()
+_FILE_CACHE_TTL = 60.0  # seconds
+_FILE_CACHE_MAXSIZE = 200
+
+
 def read_file(file_path: str) -> str:
-    """Read file content safely."""
+    """Read file content safely with TTL cache."""
+    now = time.monotonic()
+    # Evict expired entries
+    while _FILE_CACHE:
+        oldest_key, (old_content, oldest_time) = next(iter(_FILE_CACHE.items()))
+        if now - oldest_time > _FILE_CACHE_TTL:
+            _FILE_CACHE.pop(oldest_key)
+        else:
+            break
+    # Return cached if present and not expired
+    if file_path in _FILE_CACHE:
+        cached_content, _ = _FILE_CACHE[file_path]
+        _FILE_CACHE.move_to_end(file_path)
+        return cached_content
+    # Read and cache
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
-            return f.read()
+            content = f.read()
     except Exception as e:
-        return f"[Error reading {file_path}: {e}]"
+        content = f"[Error reading {file_path}: {e}]"
+    _FILE_CACHE[file_path] = (content, now)
+    _FILE_CACHE.move_to_end(file_path)
+    while len(_FILE_CACHE) > _FILE_CACHE_MAXSIZE:
+        _FILE_CACHE.popitem(last=False)
+    return content
+
+
+
+# --- mtime-aware cache for _get_l3_files ---
+_l3_cache: OrderedDict[str, tuple[Any, float]] = OrderedDict()
+_L3_CACHE_MAXSIZE = 32
+_L3_CACHE_TTL = 60.0  # seconds; also invalidated on mtime change
+
+
+def clear_cache() -> None:
+    """Clear all wiki_retriever caches. Exposed for testing."""
+    _FILE_CACHE.clear()
+    _l3_cache.clear()
 
 
 def get_wiki_schema() -> Dict[str, str]:
@@ -59,70 +99,90 @@ def _parse_frontmatter(content: str) -> tuple:
         return {}, content
 
 
-def _get_l3_files(subject: str) -> List[Dict[str, Any]]:
-    """Get all L3 files for a subject with frontmatter."""
-    files = []
+def _get_affected_l3_paths(subject: str) -> list[str]:
+    """Get all L3 .md file paths for a subject (used for cache invalidation)."""
+    paths = []
     l3_path = os.path.join(WIKI_PATH, subject, "L3")
-    if not os.path.exists(l3_path):
-        return files
-    for root, dirs, filenames in os.walk(l3_path):
-        for f in filenames:
-            if not f.endswith('.md'):
-                continue
-            file_path = os.path.join(root, f)
-            content = read_file(file_path)
-            fm, body = _parse_frontmatter(content)
-            # Skip files marked as non-searchable
-            if fm.get("searchable") is False:
-                continue
-            files.append({
-                "id": f.replace('.md', ''),
-                "file_path": file_path,
-                "title": fm.get("title", f.replace('.md', '')),
-                "type": fm.get("type", "concept"),
-                "tags": fm.get("tags", []),
-                "difficulty": fm.get("difficulty", ""),
-                "related": fm.get("related", []),
-                "body": body,
-            })
+    if os.path.exists(l3_path):
+        for root, dirs, files in os.walk(l3_path):
+            for f in files:
+                if f.endswith('.md'):
+                    paths.append(os.path.join(root, f))
+    return paths
+
+
+def _get_l3_files(subject: str) -> List[Dict[str, Any]]:
+    """Get all L3 files for a subject with frontmatter. Cached with mtime-aware TTL."""
+    now = time.monotonic()
+    l3_path = os.path.join(WIKI_PATH, subject, "L3")
+
+    current_mtime = 0.0
+    if os.path.exists(l3_path):
+        for root, dirs, files in os.walk(l3_path):
+            for fn in files:
+                if fn.endswith('.md'):
+                    try:
+                        current_mtime = max(current_mtime, os.path.getmtime(os.path.join(root, fn)))
+                    except OSError:
+                        pass
+
+    if subject in _l3_cache:
+        cached_result, cached_file_mtime = _l3_cache[subject]
+        size_ok = len(_l3_cache) <= _L3_CACHE_MAXSIZE
+        time_ok = (now - cached_file_mtime) <= _L3_CACHE_TTL
+        mtime_ok = (current_mtime == cached_file_mtime) or current_mtime == 0.0
+        if size_ok and time_ok and mtime_ok:
+            _l3_cache.move_to_end(subject)
+            return cached_result
+        # Mtime changed — also clear read_file cache for affected files
+        if not mtime_ok and current_mtime > 0:
+            for f_path in _get_affected_l3_paths(subject):
+                _FILE_CACHE.pop(f_path, None)
+
+    files = []
+    if os.path.exists(l3_path):
+        for root, dirs, filenames in os.walk(l3_path):
+            for f in filenames:
+                if not f.endswith('.md'):
+                    continue
+                file_path = os.path.join(root, f)
+                content = read_file(file_path)
+                fm, body = _parse_frontmatter(content)
+                if fm.get("searchable") is False:
+                    continue
+                files.append({
+                    "id": f.replace('.md', ''),
+                    "file_path": file_path,
+                    "title": fm.get("title", f.replace('.md', '')),
+                    "type": fm.get("type", "concept"),
+                    "tags": fm.get("tags", []),
+                    "difficulty": fm.get("difficulty", ""),
+                    "related": fm.get("related", []),
+                    "body": body,
+                })
+
+    _l3_cache[subject] = (files, current_mtime if current_mtime > 0 else now)
+    _l3_cache.move_to_end(subject)
+    while len(_l3_cache) > _L3_CACHE_MAXSIZE:
+        _l3_cache.popitem(last=False)
+
     return files
 
 
 def list_concepts(subject: str) -> List[Dict[str, Any]]:
-    """List all concepts for a subject."""
+    """List all concepts for a subject. Reuses _get_l3_files to avoid duplicate traversal."""
+    l3_files = _get_l3_files(subject)
     concepts = []
-    l3_path = os.path.join(WIKI_PATH, subject, "L3")
-    if not os.path.exists(l3_path):
-        l3_path = os.path.join(l3_path, "concepts")
-        if not os.path.exists(l3_path):
-            return concepts
-    for root, dirs, files in os.walk(l3_path):
-        for file in files:
-            if file.endswith('.md'):
-                file_path = os.path.join(root, file)
-                content = read_file(file_path)
-                concept_info = {
-                    "title": file.replace('.md', ''),
-                    "file_path": file_path,
-                    "type": "concept"
-                }
-                if content.startswith('---'):
-                    parts = content.split('---', 2)
-                    if len(parts) >= 3:
-                        try:
-                            import yaml
-                            frontmatter = yaml.safe_load(parts[1])
-                            if frontmatter:
-                                concept_info.update({
-                                    "id": frontmatter.get("id", ""),
-                                    "title": frontmatter.get("title", concept_info["title"]),
-                                    "type": frontmatter.get("type", "concept"),
-                                    "tags": frontmatter.get("tags", []),
-                                    "related": frontmatter.get("related", [])
-                                })
-                        except:
-                            pass
-                concepts.append(concept_info)
+    for f in l3_files:
+        if f.get("type") == "concept":
+            concepts.append({
+                "id": f.get("id", ""),
+                "title": f.get("title", ""),
+                "file_path": f.get("file_path", ""),
+                "type": "concept",
+                "tags": f.get("tags", []),
+                "related": f.get("related", []),
+            })
     return concepts
 
 
@@ -285,7 +345,7 @@ def retrieve_knowledge(query: str, subject: Optional[str] = None) -> Dict[str, A
     subjects_to_search = [subject] if subject else SUBJECTS
     for subj in subjects_to_search:
         schema = get_subject_schema(subj)
-        subj_results, subj_sources = _search_subject(subj, query, schema)
+        subj_results, subj_sources = _search_subject(subj, query, schema, top_n=3)
         results.extend(subj_results)
         sources.extend(subj_sources)
     content = "\n\n".join(results) if results else ""
@@ -342,7 +402,7 @@ def _score_relevance(content: str, query: str, title: str = "", tags: list = Non
     return min(int(score), 100)
 
 
-def _search_subject(subject: str, query: str, schema: Dict[str, str]) -> tuple:
+def _search_subject(subject: str, query: str, schema: Dict[str, str], top_n: int = 3) -> tuple:
     """Search within a subject for relevant content. Scores and ranks results."""
     l3_path = os.path.join(WIKI_PATH, subject, "L3")
     scored_results = []
@@ -365,14 +425,12 @@ def _search_subject(subject: str, query: str, schema: Dict[str, str]) -> tuple:
                     clean = re.sub(r'^---.*?---\s*', '', content, flags=re.DOTALL)
                     scored_results.append((score, clean[:2000].strip(), f"{subject}/L3/{file}"))
 
-    # Sort by score descending, take top 3
     scored_results.sort(key=lambda x: -x[0])
-    top = scored_results[:3]
+    top = scored_results[:top_n]
 
     results = [r[1] for r in top]
     sources = [r[2] for r in top]
 
-    # Fallback: check schema/index if no L3 results
     if not results:
         schema_content = schema.get("SCHEMA.md", "")
         if schema_content and _score_relevance(schema_content, query) >= 30:
