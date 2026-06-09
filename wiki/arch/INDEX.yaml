@@ -1,0 +1,76 @@
+# INDEX.yaml - 计算机组成原理学科 L2 索引
+# 本文件定义计算机组成原理学科的章节体系和知识映射关系
+
+subject: arch
+subject_name: 计算机组成原理
+version: 1.0
+created: 2026-06-09
+
+chapters:
+  - id: ch1
+    title: 计算机系统概述
+    order: 1
+    raw_sources:
+      - RAW/1 计算机系统概述
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch2
+    title: 数据的表示和运算
+    order: 2
+    raw_sources:
+      - RAW/2 数据的表示和运算
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch3
+    title: 存储系统
+    order: 3
+    raw_sources:
+      - RAW/3 存储系统
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch4
+    title: 指令系统
+    order: 4
+    raw_sources:
+      - RAW/4 指令系统
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch5
+    title: 中央处理器
+    order: 5
+    raw_sources:
+      - RAW/5 中央处理器
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch6
+    title: 总线
+    order: 6
+    raw_sources:
+      - RAW/6 总线
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch7
+    title: 输入输出系统
+    order: 7
+    raw_sources:
+      - RAW/7 输入输出系统
+    concepts: []
+    methods: []
+    exercises: []
+
+# 全局背诵知识点
+recitation_notes:
+  - RAW/计算机组成原理.md
+  - RAW/背诵知识点.md

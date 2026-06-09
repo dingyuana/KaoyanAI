@@ -1,0 +1,87 @@
+# INDEX.yaml - 数据结构学科 L2 索引
+# 本文件定义数据结构学科的章节体系和知识映射关系
+
+subject: ds
+subject_name: 数据结构
+version: 1.0
+created: 2026-06-09
+
+chapters:
+  - id: ch1
+    title: 绪论
+    order: 1
+    raw_sources:
+      - RAW/1 绪论
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch2
+    title: 线性表
+    order: 2
+    raw_sources:
+      - RAW/2 线性表
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch3
+    title: 栈、队列和数组
+    order: 3
+    raw_sources:
+      - RAW/3 栈、队列和数组
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch4
+    title: 串
+    order: 4
+    raw_sources:
+      - RAW/4 串
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch5
+    title: 树与二叉树
+    order: 5
+    raw_sources:
+      - RAW/5 树与二叉树
+      - RAW/二叉树常考结论.md
+      - RAW/二叉树相关结论.md
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch6
+    title: 图
+    order: 6
+    raw_sources:
+      - RAW/6 图
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch7
+    title: 查找
+    order: 7
+    raw_sources:
+      - RAW/7 查找
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch8
+    title: 排序
+    order: 8
+    raw_sources:
+      - RAW/8 排序
+    concepts: []
+    methods: []
+    exercises: []
+
+# 全局背诵知识点
+recitation_notes:
+  - RAW/数据结构.md
+  - RAW/背诵知识点.md

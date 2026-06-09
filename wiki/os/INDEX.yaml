@@ -1,0 +1,58 @@
+# INDEX.yaml - 操作系统学科 L2 索引
+# 本文件定义操作系统的章节体系和知识映射关系
+
+subject: os
+subject_name: 操作系统
+version: 1.0
+created: 2026-06-09
+
+chapters:
+  - id: ch1
+    title: 计算机系统概述
+    order: 1
+    raw_sources:
+      - RAW/1 计算机系统概述
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch2
+    title: 进程与线程
+    order: 2
+    raw_sources:
+      - RAW/2 进程与线程
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch3
+    title: 内存管理
+    order: 3
+    raw_sources:
+      - RAW/3 内存管理
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch4
+    title: 文件管理
+    order: 4
+    raw_sources:
+      - RAW/4 文件管理
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch5
+    title: 输入输出管理
+    order: 5
+    raw_sources:
+      - RAW/5 输入输出管理
+    concepts: []
+    methods: []
+    exercises: []
+
+# 全局背诵知识点
+recitation_notes:
+  - RAW/操作系统.md
+  - RAW/背诵知识点.md

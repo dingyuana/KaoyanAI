@@ -1,0 +1,68 @@
+# INDEX.yaml - 计算机网络学科 L2 索引
+# 本文件定义计算机网络的章节体系和知识映射关系
+
+subject: net
+subject_name: 计算机网络
+version: 1.0
+created: 2026-06-09
+
+chapters:
+  - id: ch1
+    title: 计算机网络体系结构
+    order: 1
+    raw_sources:
+      - RAW/1 计算机网络体系结构
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch2
+    title: 物理层
+    order: 2
+    raw_sources:
+      - RAW/2 物理层
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch3
+    title: 数据链路层
+    order: 3
+    raw_sources:
+      - RAW/3 数据链路层
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch4
+    title: 网络层
+    order: 4
+    raw_sources:
+      - RAW/4 网络层
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch5
+    title: 传输层
+    order: 5
+    raw_sources:
+      - RAW/5 传输层
+    concepts: []
+    methods: []
+    exercises: []
+
+  - id: ch6
+    title: 应用层
+    order: 6
+    raw_sources:
+      - RAW/6 应用层
+    concepts: []
+    methods: []
+    exercises: []
+
+# 全局文件
+recitation_notes:
+  - RAW/计算机网络.md
+  - RAW/背诵知识点.md
+  - RAW/各设备对于隔离冲突域的总结.md
