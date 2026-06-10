@@ -1,6 +1,7 @@
 """Tests for FastAPI endpoints in main.py."""
 
 import json
+from unittest.mock import patch
 
 
 class TestHealth:
@@ -28,6 +29,30 @@ class TestConcepts:
         assert "groups" in data
         assert data["count"] >= 0
 
+    def test_concepts_ds_has_content(self, client):
+        resp = client.get("/concepts/ds")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["count"] > 0
+
+    def test_concepts_arch_has_content(self, client):
+        resp = client.get("/concepts/arch")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["count"] > 0
+
+    def test_concepts_net_has_content(self, client):
+        resp = client.get("/concepts/net")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["count"] > 0
+
+    def test_concepts_os_has_content(self, client):
+        resp = client.get("/concepts/os")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["count"] > 0
+
     def test_concepts_unknown_returns_404(self, client):
         resp = client.get("/concepts/nonexistent")
         assert resp.status_code == 404
@@ -38,6 +63,7 @@ class TestChat:
         resp = client.post("/chat", json={"message": ""})
         assert resp.status_code == 400
 
+    @patch('llm.MOCK_MODE', True)
     def test_chat_valid_message_returns_answer(self, client):
         resp = client.post("/chat", json={"message": "什么是极限？"})
         assert resp.status_code == 200
@@ -45,6 +71,7 @@ class TestChat:
         assert "answer" in data
         assert "sources" in data
 
+    @patch('llm.MOCK_MODE', True)
     def test_chat_stream_returns_sse(self, client):
         resp = client.post("/chat/stream", json={"message": "什么是导数？"})
         assert resp.status_code == 200

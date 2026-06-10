@@ -3,3 +3,8 @@ uvicorn[standard]
 PyYAML
 httpx
 python-dotenv
+sqlalchemy[asyncio]
+asyncpg
+python-jose
+passlib[bcrypt]
+bcrypt

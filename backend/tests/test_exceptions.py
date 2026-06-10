@@ -1,7 +1,7 @@
 """Tests for custom exception classes."""
 
 import pytest
-from backend.exceptions import (
+from exceptions import (
     KaoyanError,
     SubjectNotFoundError,
     InvalidInputError,

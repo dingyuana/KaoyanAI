@@ -1,7 +1,7 @@
 """Tests for LLM module."""
 
 import pytest
-from backend.llm import _mock_response, generate_response, estimate_tokens, trim_context
+from llm import _mock_response, generate_response, estimate_tokens, trim_context
 
 
 class TestEstimateTokens:

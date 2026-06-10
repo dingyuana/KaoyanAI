@@ -390,7 +390,7 @@ def _score_relevance(content: str, query: str, title: str = "", tags: list = Non
         return 0
 
     title_matches = sum(1 for k in keywords if k in title_lower)
-    tag_matches = sum(1 for t in (tags or []) for k in keywords if k in t.lower())
+    tag_matches = sum(1 for t in (tags or []) for k in keywords if isinstance(t, str) and k in t.lower())
     content_matches = sum(1 for k in keywords if k in content_lower)
 
     score = 0

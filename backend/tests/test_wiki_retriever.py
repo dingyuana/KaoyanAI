@@ -1,6 +1,6 @@
 """Tests for wiki_retriever module."""
 
-from backend.wiki_retriever import get_subjects, _is_relevant, _extract_ngrams
+from wiki_retriever import get_subjects, _is_relevant, _extract_ngrams
 
 
 class TestIsRelevant:

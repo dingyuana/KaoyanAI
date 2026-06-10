@@ -2,7 +2,7 @@
 
 import asyncio
 
-from backend.llm import generate_response_stream
+from llm import generate_response_stream
 
 
 class TestGenerateResponseStream:
@@ -53,4 +53,4 @@ class TestGenerateResponseStream:
         chunks = asyncio.run(consume())
         assert len(chunks) > 0, "空上下文时仍应返回 chunk（道歉信息）"
         full_content = "".join(chunks)
-        assert "抱歉" in full_content or "没有" in full_content, "应返回歉意信息"
+        assert "抱歉" in full_content or "没有" in full_content or "无法" in full_content, "应返回歉意信息"

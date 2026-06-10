@@ -20,6 +20,8 @@ from exceptions import (
 )
 from logging_config import get_logger
 from rate_limiter import rate_limiter
+from database import init_db
+from auth import router as auth_router
 
 logger = get_logger()
 
@@ -76,11 +78,14 @@ async def general_error_handler(request: Request, exc: Exception):
 
 @app.on_event("startup")
 async def startup_event():
+    await init_db()
     if MOCK_MODE:
         print("注意：未配置 LLM_API_KEY，系统运行在 Mock 模式")
     else:
         from config import LLM_MODEL, LLM_BASE_URL
         print(f"LLM 已连接: {LLM_MODEL} @ {LLM_BASE_URL}")
+
+app.include_router(auth_router)
 
 
 class ChatRequest(BaseModel):
