@@ -24,6 +24,7 @@ from database import init_db
 from auth import router as auth_router
 from diagnosis import router as diagnosis_router
 from error_book import router as error_book_router
+from planner import router as planner_router
 
 logger = get_logger()
 
@@ -90,6 +91,7 @@ async def startup_event():
 app.include_router(auth_router)
 app.include_router(diagnosis_router)
 app.include_router(error_book_router)
+app.include_router(planner_router)
 
 
 class ChatRequest(BaseModel):
