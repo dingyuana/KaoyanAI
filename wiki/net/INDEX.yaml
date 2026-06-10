@@ -1,10 +1,10 @@
-# INDEX.yaml - 计算机网络学科 L2 索引
+# INDEX.yaml - 计算机网络学科 L3 索引
 # 本文件定义计算机网络的章节体系和知识映射关系
 
 subject: net
 subject_name: 计算机网络
-version: 1.0
-created: 2026-06-09
+version: 2.0
+created: 2026-06-10
 
 chapters:
   - id: ch1
@@ -12,52 +12,85 @@ chapters:
     order: 1
     raw_sources:
       - RAW/1 计算机网络体系结构
-    concepts: []
-    methods: []
-    exercises: []
+    concepts:
+      - L3/concepts/L3-net-concept-OSI七层模型.md
+      - L3/concepts/L3-net-concept-TCP-IP体系结构.md
+      - L3/concepts/L3-net-concept-计算机网络性能指标.md
+    methods:
+      - L3/methods/L3-net-method-时延计算方法.md
+    exercises:
+      - L3/exercises/L3-net-exercise-网络体系结构与时延习题.md
 
   - id: ch2
     title: 物理层
     order: 2
     raw_sources:
       - RAW/2 物理层
-    concepts: []
+    concepts:
+      - L3/concepts/L3-net-concept-奈氏准则与香农定理.md
+      - L3/concepts/L3-net-concept-编码与调制.md
+      - L3/concepts/L3-net-concept-交换技术.md
     methods: []
-    exercises: []
+    exercises:
+      - L3/exercises/L3-net-exercise-奈氏准则和香农定理习题.md
 
   - id: ch3
     title: 数据链路层
     order: 3
     raw_sources:
       - RAW/3 数据链路层
-    concepts: []
-    methods: []
-    exercises: []
+    concepts:
+      - L3/concepts/L3-net-concept-MAC地址与ARP协议.md
+      - L3/concepts/L3-net-concept-CSMA-CD协议.md
+      - L3/concepts/L3-net-concept-以太网交换机.md
+      - L3/concepts/L3-net-concept-CSMA-CA协议.md
+      - L3/concepts/L3-net-concept-PPP协议.md
+    methods:
+      - L3/methods/L3-net-method-CRC校验计算方法.md
+    exercises:
+      - L3/exercises/L3-net-exercise-CSMA-CD习题.md
 
   - id: ch4
     title: 网络层
     order: 4
     raw_sources:
       - RAW/4 网络层
-    concepts: []
-    methods: []
-    exercises: []
+    concepts:
+      - L3/concepts/L3-net-concept-IPv4地址与分类.md
+      - L3/concepts/L3-net-concept-IPv4数据报与分片.md
+      - L3/concepts/L3-net-concept-路由协议.md
+      - L3/concepts/L3-net-concept-NAT网络地址转换.md
+      - L3/concepts/L3-net-concept-ICMP协议.md
+    methods:
+      - L3/methods/L3-net-method-子网划分方法.md
+      - L3/methods/L3-net-method-IP地址分类与判断.md
+    exercises:
+      - L3/exercises/L3-net-exercise-子网划分与IP地址习题.md
 
   - id: ch5
     title: 传输层
     order: 5
     raw_sources:
       - RAW/5 传输层
-    concepts: []
-    methods: []
-    exercises: []
+    concepts:
+      - L3/concepts/L3-net-concept-UDP协议.md
+      - L3/concepts/L3-net-concept-TCP协议概述.md
+      - L3/concepts/L3-net-concept-TCP三次握手.md
+      - L3/concepts/L3-net-concept-TCP拥塞控制.md
+    methods:
+      - L3/methods/L3-net-method-TCP拥塞控制分析.md
+    exercises:
+      - L3/exercises/L3-net-exercise-TCP综合习题.md
 
   - id: ch6
     title: 应用层
     order: 6
     raw_sources:
       - RAW/6 应用层
-    concepts: []
+    concepts:
+      - L3/concepts/L3-net-concept-HTTP协议.md
+      - L3/concepts/L3-net-concept-DNS域名系统.md
+      - L3/concepts/L3-net-concept-电子邮件系统.md
     methods: []
     exercises: []
 
