@@ -23,14 +23,17 @@ describe('ChatInterface', () => {
   it('renders the initial empty state with welcome message', () => {
     render(<ChatInterface />);
     expect(screen.getByText('考研知识问答助手')).toBeTruthy();
-    expect(screen.getByText(/基于考研数学知识库/)).toBeTruthy();
+    expect(screen.getByText(/支持数学、数据结构/)).toBeTruthy();
   });
 
-  it('renders subject selector buttons', () => {
+  it('renders subject selector buttons', async () => {
     render(<ChatInterface />);
+    // Initial state only shows math before fetch completes
     expect(screen.getByText('数学')).toBeTruthy();
-    expect(screen.getByText('英语')).toBeTruthy();
-    expect(screen.getByText('政治')).toBeTruthy();
+    // After fetch resolves, more subjects appear
+    await waitFor(() => {
+      expect(screen.getByText('数据结构')).toBeTruthy();
+    });
   });
 
   it('renders the input textarea', () => {
