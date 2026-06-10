@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ClientLayout } from "./client-layout";
 
 export const metadata: Metadata = {
-  title: "考研数学问答助手",
-  description: "智能考研数学问答助手，帮助您解答高等数学、线性代数、概率论等问题",
+  title: "考研智能学习助手",
+  description: "基于知识库的考研智能学习助手，支持数学、数据结构、组成原理、计算机网络、操作系统",
 };
 
 export default function RootLayout({
@@ -18,7 +19,7 @@ export default function RootLayout({
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" />
       </head>
       <body className="antialiased">
-        {children}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
