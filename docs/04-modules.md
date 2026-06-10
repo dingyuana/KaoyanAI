@@ -197,7 +197,18 @@ MOCK_MODE        # 自动判断（Key 为空时 true）
 | `math/TEMPLATES/` | 文件模板 | ✅ 完成 |
 | `math/_meta/concept_map.yaml` | 概念词表 | ✅ 完成 |
 
-### W3：其他学科
+### W3：408 计算机专业课知识库（新增）
+
+| 学科 | RAW 文件 | L3 文件 | 状态 |
+|------|----------|---------|------|
+| `ds/` 数据结构 | 196 | 0 | ⚠️ M4.1 编译中 |
+| `arch/` 组成原理 | 255 | 0 | ⚠️ M4.1 编译中 |
+| `net/` 计算机网络 | 200 | 0 | ⚠️ M4.1 编译中 |
+| `os/` 操作系统 | 186 | 0 | ⚠️ M4.1 编译中 |
+
+各学科目录结构同数学（SCHEMA.md / AGENT.md / INDEX.yaml / RAW / L3 / TEMPLATES / _meta）。
+
+### W4：其他学科
 
 | 学科 | 状态 | 备注 |
 |------|------|------|
@@ -208,39 +219,41 @@ MOCK_MODE        # 自动判断（Key 为空时 true）
 
 ## 五、待建模块
 
-### P1：部署模块（M4.2）
+### P1：概念浏览模块（M4.3）
 
 | 文件 | 职责 |
 |------|------|
-| `docker-compose.yml` | 一键启动编排 |
-| `backend/Dockerfile` | 后端容器化 |
-| `frontend/Dockerfile` | 前端容器化（standalone） |
-| `nginx/nginx.conf` | 反向代理配置 |
-| `.github/workflows/ci.yml` | CI/CD 流水线 |
-
-### P2：概念浏览模块（M4.4）
-
-| 文件 | 职责 |
-|------|------|
-| `frontend/src/components/ConceptTree.tsx` | 概念树组件 |
+| `frontend/src/components/ConceptTree.tsx` | 概念树组件（7 学科） |
 | `frontend/src/components/ConceptDetail.tsx` | 概念详情 |
 | `frontend/src/app/concepts/page.tsx` | 概念浏览页面 |
 
-### P3：测试模块（M4.3）
+### P2：测试模块（M4.4）
 
 | 文件 | 职责 |
 |------|------|
 | `backend/tests/` | 后端测试 |
 | `frontend/src/__tests__/` | 前端测试 |
 
-### P4：习题关联模块（M5.1）
+### P3：习题关联模块（M4.5）
 
 | 文件 | 职责 |
 |------|------|
 | 已有习题 30 个 L3 文件 | 习题数据 |
 | INDEX.yaml related 字段 | 关联关系 |
 
-### P5：多学科模块（M5.3）
+### P4：部署模块（M6 — 发布阶段启用）
+
+| 文件 | 职责 |
+|------|------|
+| `docker-compose.yml` | 一键启动编排（已有，M6 验证） |
+| `backend/Dockerfile` | 后端容器化（已有） |
+| `frontend/Dockerfile` | 前端容器化（standalone，已有） |
+| `nginx/nginx.conf` | 反向代理配置（已有） |
+| `.github/workflows/ci.yml` | CI/CD 流水线（待创建） |
+
+> ⚠️ 开发阶段不使用 Docker，保持本地运行（uvicorn + npm run dev）。
+
+### P5：多学科模块（M5）
 
 | 文件 | 职责 |
 |------|------|
@@ -252,10 +265,10 @@ MOCK_MODE        # 自动判断（Key 为空时 true）
 
 ## 六、接口变更计划
 
-| 接口 | 当前状态 | M4 变更 |
-|------|---------|--------|
-| `POST /chat/stream` | SSE 流式 | 改为真实 LLM 流式推送 |
-| `GET /concepts/{subject}` | 扁平列表 | 增加章节分组、层级结构 |
-| `GET /subjects` | 返回学科列表 | 增加 `concept_count` 字段 |
-| 新增 `GET /concepts/{subject}/search` | — | 关键词搜索 |
-| 新增 `GET /concepts/{id}/related` | — | 关联习题 |
+| 接口 | 当前状态 | M4/M5 变更 |
+|------|---------|-----------|
+| `POST /chat/stream` | ✅ 真实 LLM 流式（已有） | 无需变更 |
+| `GET /concepts/{subject}` | ✅ 章节分组（已有） | 确认支持 7 学科 |
+| `GET /subjects` | ✅ 自动检测（已有） | SUBJECTS 列表扩展至 7 学科 |
+| `GET /concepts/{subject}/{id}/exercises` | ✅ 关联习题（已有） | 前端展示 |
+| `GET /exercises/{subject}` | ✅ 习题列表（已有） | 前端展示 |

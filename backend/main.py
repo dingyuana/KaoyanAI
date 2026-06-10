@@ -9,7 +9,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, field_validator
 from typing import List, Optional
 
-from config import SUBJECTS, MOCK_MODE
+from config import MOCK_MODE
 from wiki_retriever import get_subjects, list_concepts, retrieve_knowledge, get_concept_detail, get_related_exercises, get_subject_exercises
 from llm import generate_response, generate_response_stream
 from exceptions import (
@@ -115,6 +115,11 @@ def _get_client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
+def _validate_subject(subject: str) -> bool:
+    """Check if a subject exists in the wiki knowledge base."""
+    return subject in get_subjects()
+
+
 @app.get("/health")
 async def health_check(request: Request):
     """Health check endpoint."""
@@ -137,7 +142,7 @@ async def get_concepts(subject: str, request: Request):
     """Get list of concepts for a specific subject, grouped by chapter."""
     rate_limiter.check(_get_client_ip(request))
 
-    if subject not in SUBJECTS:
+    if not _validate_subject(subject):
         raise SubjectNotFoundError(subject)
 
     logger.info(f"Fetching concepts for subject: {subject}")
@@ -220,7 +225,7 @@ async def chat_stream(request: ChatRequest, req: Request):
 async def get_concept_detail_route(subject: str, concept_id: str, request: Request):
     rate_limiter.check(_get_client_ip(request))
 
-    if subject not in SUBJECTS:
+    if not _validate_subject(subject):
         raise SubjectNotFoundError(subject)
 
     detail = get_concept_detail(subject, concept_id)
@@ -234,7 +239,7 @@ async def get_concept_detail_route(subject: str, concept_id: str, request: Reque
 async def get_related_exercises_route(subject: str, concept_id: str, request: Request):
     rate_limiter.check(_get_client_ip(request))
 
-    if subject not in SUBJECTS:
+    if not _validate_subject(subject):
         raise SubjectNotFoundError(subject)
 
     exercises = get_related_exercises(subject, concept_id)
@@ -245,7 +250,7 @@ async def get_related_exercises_route(subject: str, concept_id: str, request: Re
 async def get_exercises_route(subject: str, request: Request):
     rate_limiter.check(_get_client_ip(request))
 
-    if subject not in SUBJECTS:
+    if not _validate_subject(subject):
         raise SubjectNotFoundError(subject)
 
     result = get_subject_exercises(subject)

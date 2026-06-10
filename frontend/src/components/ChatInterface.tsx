@@ -11,11 +11,15 @@ export interface Message {
   content: string;
 }
 
-const SUBJECTS = [
-  { id: 'math', label: '数学', active: true },
-  { id: 'english', label: '英语', active: false },
-  { id: 'politics', label: '政治', active: false },
-];
+const SUBJECT_MAP: Record<string, { label: string; icon: string }> = {
+  math: { label: '数学', icon: '📐' },
+  english: { label: '英语', icon: '📖' },
+  politics: { label: '政治', icon: '🏛️' },
+  ds: { label: '数据结构', icon: '🔗' },
+  arch: { label: '组成原理', icon: '💻' },
+  net: { label: '计算机网络', icon: '🌐' },
+  os: { label: '操作系统', icon: '⚙️' },
+};
 
 interface StreamMessage {
   id: string;
@@ -39,11 +43,27 @@ export function ChatInterface() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [subject, setSubject] = useState('math');
+  const [availableSubjects, setAvailableSubjects] = useState<string[]>(['math']);
   const lastQuestionRef = useRef<string>('');
   const streamRef = useRef<StreamMessage | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const idCounterRef = useRef<number>(0);
+
+  useEffect(() => {
+    fetch('/kaoyan/api/subjects')
+      .then((r) => r.json())
+      .then((data) => {
+        const subjects = data.subjects || ['math'];
+        setAvailableSubjects(subjects);
+        if (!subjects.includes(subject)) {
+          setSubject(subjects[0]);
+        }
+      })
+      .catch(() => {
+        setAvailableSubjects(['math']);
+      });
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -149,23 +169,23 @@ export function ChatInterface() {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-1 px-5 py-2.5 border-b dark:border-gray-700 bg-white dark:bg-gray-800/50">
-        {SUBJECTS.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => s.active && setSubject(s.id)}
-            disabled={!s.active}
-            className={`px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
-              subject === s.id
-                ? 'bg-blue-500 text-white font-medium shadow-sm'
-                : s.active
-                  ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  : 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            {s.label}
-            {!s.active && <span className="ml-1 text-xs opacity-60">(即将上线)</span>}
-          </button>
-        ))}
+        {availableSubjects.map((id) => {
+          const info = SUBJECT_MAP[id] || { label: id, icon: '📚' };
+          return (
+            <button
+              key={id}
+              onClick={() => setSubject(id)}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
+                subject === id
+                  ? 'bg-blue-500 text-white font-medium shadow-sm'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
+              {info.icon && <span className="mr-1">{info.icon}</span>}
+              {info.label}
+            </button>
+          );
+        })}
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4 scrollbar-thin">
@@ -176,7 +196,7 @@ export function ChatInterface() {
             </div>
             <p className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-2">考研知识问答助手</p>
             <p className="text-sm text-gray-400 dark:text-gray-500 max-w-md leading-relaxed">
-              基于考研数学知识库，智能解答高等数学、线性代数、概率论等问题
+              支持数学、数据结构、组成原理、计算机网络、操作系统等学科，基于知识库智能解答
             </p>
             <p className="text-xs text-gray-300 dark:text-gray-600 mt-4">
               输入问题开始提问 · 支持 LaTeX 公式
