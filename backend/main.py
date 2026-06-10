@@ -22,6 +22,7 @@ from logging_config import get_logger
 from rate_limiter import rate_limiter
 from database import init_db
 from auth import router as auth_router
+from diagnosis import router as diagnosis_router
 
 logger = get_logger()
 
@@ -86,6 +87,7 @@ async def startup_event():
         print(f"LLM 已连接: {LLM_MODEL} @ {LLM_BASE_URL}")
 
 app.include_router(auth_router)
+app.include_router(diagnosis_router)
 
 
 class ChatRequest(BaseModel):
