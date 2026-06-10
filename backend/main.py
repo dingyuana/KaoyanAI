@@ -26,6 +26,8 @@ from diagnosis import router as diagnosis_router
 from error_book import router as error_book_router
 from planner import router as planner_router
 from tutor import router as tutor_router
+from exam import router as exam_router
+from stats import router as stats_router
 
 logger = get_logger()
 
@@ -94,6 +96,8 @@ app.include_router(diagnosis_router)
 app.include_router(error_book_router)
 app.include_router(planner_router)
 app.include_router(tutor_router)
+app.include_router(exam_router)
+app.include_router(stats_router)
 
 
 class ChatRequest(BaseModel):

@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/lib/auth-context';
-import { MessageSquare, BookOpen, ClipboardCheck, BookX, Calendar, GraduationCap, LogIn, LogOut, User } from 'lucide-react';
+import { MessageSquare, BookOpen, ClipboardCheck, BookX, Calendar, GraduationCap, LogIn, LogOut, BarChart3, FileCheck } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -9,8 +9,10 @@ const NAV_ITEMS = [
   { href: '/kaoyan', label: '问答', icon: MessageSquare },
   { href: '/kaoyan/concepts', label: '概念', icon: BookOpen },
   { href: '/kaoyan/diagnosis', label: '诊断', icon: ClipboardCheck, needAuth: true },
+  { href: '/kaoyan/exam', label: '模考', icon: FileCheck, needAuth: true },
   { href: '/kaoyan/error-book', label: '错题', icon: BookX, needAuth: true },
   { href: '/kaoyan/plan', label: '计划', icon: Calendar, needAuth: true },
+  { href: '/kaoyan/dashboard', label: '数据', icon: BarChart3, needAuth: true },
   { href: '/kaoyan/tutor', label: '辅导', icon: GraduationCap },
 ];
 
