@@ -32,8 +32,11 @@ dev: ## 同时启动前后端（需要 tmux）
 test-backend: ## 运行后端测试
 	cd backend && python3 -m pytest tests/ -v
 
-test-frontend: ## 运行前端测试
+test-frontend: ## 运行前端单元测试
 	cd frontend && npx vitest run
+
+test-e2e: ## 运行 E2E 浏览器测试（需先启动前后端）
+	cd frontend && npx playwright test ../e2e/ --config=../e2e/playwright.config.ts
 
 test: test-backend test-frontend ## 运行全部测试
 
