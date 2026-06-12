@@ -4,7 +4,7 @@ title: CSMA/CA协议
 subject: net
 type: concept
 level: 3
-tags: [CSMA/CA, 无线局域网, 802.11, 数据链路层]
+tags: [CSMA/CA, 无线局域网, "802.11", 数据链路层]
 related:
   - L3-net-concept-CSMA-CD协议.md
 source_anchors: [RAW-net-3数据链路层-3.5.2随机接入协议分类, RAW-net-3数据链路层-CSMA CA是什么]

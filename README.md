@@ -6,17 +6,46 @@
 
 ---
 
+## 📌 Changelog
+
+### 🔴 Major Change — 2026-06-10
+- **Change type**: scope expansion / test infrastructure build / full backend+frontend implementation
+- **Summary**: 单日落地 9 个 Phase（Phase 1-9），后端 + 前端 + 测试全链路打通。原先 M1-M4 阶段被一次性推进
+- **Trigger**: 今日 10 个 commit（`1492628`→`0ca9744`），密集冲刺
+- **Impact**: 项目从"知识库+问答 MVP"跃迁为"全功能考研智能学习助手"
+- **Details**:
+  - **后端 5 个 Phase 同时落地**：
+    - Phase 1：数据库模型 + JWT 认证（`auth.py`/`database.py`）
+    - Phase 2：学习诊断系统（`diagnosis.py`）
+    - Phase 3：错题管理（`error_book.py`）
+    - Phase 4：个性化学习规划（`planner.py`）
+    - Phase 5：AI 引导式辅导（`tutor.py`，苏格拉底式引导）
+  - **前端 UI 全部补齐**（`feat(frontend): UI pages for all backend modules`）：
+    - `/dashboard` `/exam` `/plan` `/tutor` `/error-book` `/diagnosis` 等所有后端模块对应的前端页面
+  - **能力可视化 + 模考**（`Phase 7+9`）：
+    - `stats.py`：聚合统计、雷达图（每章正确率）、趋势（成绩曲线）
+    - `exam.py`：自动出卷/答题/判分/章节分析/历史对比
+    - 前端：模考倒计时+自动交卷+章节柱状图+历史+数据看板
+  - **前端测试全量覆盖**（`test(frontend): full test coverage for all pages`）：
+    - 9 个测试文件，38 个测试用例（前端）+ 80 个后端测试
+    - 覆盖渲染、用户交互、异步状态
+    - setup.ts 补全 mocks（auth/api/next/lucide/recharts）
+  - **408 知识库 L3 编译启动**：数据结构(`ds`)、计算机网络(`net`)L3 完成
+- **Corresponding commits**: `1492628` `cff31b3` `b0f9a57` `4b154c5` `b65c9e1` `e28d08d` `bf73eea` `0ca9744` `576ed6e` `07ee104`
+
+---
+
 ## 项目状态总览
 
 | 维度 | 状态 |
 |------|------|
-| 后端 API | ✅ 已完成（模块化 FastAPI，含异常处理/日志/限流/LLM 流式） |
-| 前端界面 | ✅ 已完成（Next.js 16 流式问答 + KaTeX） |
+| 后端 API | ✅ 已完成（模块化 FastAPI，含 9 个 Phase：auth/diagnosis/error_book/planner/tutor/exam/stats + LLM 流式） |
+| 前端界面 | ✅ 已完成（Next.js 16，所有后端模块 UI 全覆盖，含流式问答+KaTeX+模考+数据看板） |
 | 知识库（数学） | ✅ 已完成（737 个文件，255 个 L3 概念/方法/习题） |
-| 知识库（408 专业课） | ⚠️ RAW 就绪（837 文件），**L3 编译中** |
+| 知识库（408 专业课） | ⚠️ RAW 就绪（837 文件），**L3 编译进行中**（`ds`+`net` L3 已完成） |
 | 真实 LLM 集成 | ✅ 已完成（流式调用，配置 API Key 即可启用） |
 | Docker 部署 | ⏸ 开发阶段本地运行，发布时启用 |
-| 测试 | ❌ 未完成 |
+| 测试 | ✅ **已完成**（后端 80 个 + 前端 38 个测试用例通过） |
 | 多学科扩展 | ⚠️ CS 四门课已接入，英语/政治待启动 |
 
 ---

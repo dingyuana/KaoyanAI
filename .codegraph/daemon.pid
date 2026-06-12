@@ -1,6 +1,6 @@
 {
-  "pid": 1141501,
+  "pid": 436674,
   "version": "0.9.7",
-  "socketPath": "/root/data/disk/kaoyan/.codegraph/daemon.sock",
-  "startedAt": 1780989075285
+  "socketPath": "/data/disk/disk/kaoyan/.codegraph/daemon.sock",
+  "startedAt": 1781251569656
 }

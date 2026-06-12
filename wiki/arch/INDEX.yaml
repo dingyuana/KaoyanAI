@@ -12,7 +12,11 @@ chapters:
     order: 1
     raw_sources:
       - RAW/1 计算机系统概述
-    concepts: []
+    concepts:
+      - L3/concepts/L3-arch-concept-冯诺依曼结构.md
+      - L3/concepts/L3-arch-concept-计算机层次结构.md
+      - L3/concepts/L3-arch-concept-计算机性能指标CPI.md
+      - L3/concepts/L3-arch-concept-计算机性能指标.md
     methods: []
     exercises: []
 
@@ -21,25 +25,55 @@ chapters:
     order: 2
     raw_sources:
       - RAW/2 数据的表示和运算
-    concepts: []
-    methods: []
-    exercises: []
+    concepts:
+      - L3/concepts/L3-arch-concept-原码反码补码.md
+      - L3/concepts/L3-arch-concept-移码.md
+      - L3/concepts/L3-arch-concept-浮点数表示.md
+      - L3/concepts/L3-arch-concept-浮点数表示IEEE754.md
+      - L3/concepts/L3-arch-concept-浮点数加减运算.md
+      - L3/concepts/L3-arch-concept-定点数移位运算.md
+      - L3/concepts/L3-arch-concept-定点数运算与ALU.md
+      - L3/concepts/L3-arch-concept-算术逻辑单元ALU.md
+      - L3/concepts/L3-arch-concept-补码加减法及溢出.md
+    methods:
+      - L3/methods/L3-arch-method-IEEE754浮点数转换方法.md
+      - L3/methods/L3-arch-method-补码加减法运算方法.md
+    exercises:
+      - L3/exercises/L3-arch-exercise-数据表示运算习题.md
 
   - id: ch3
     title: 存储系统
     order: 3
     raw_sources:
       - RAW/3 存储系统
-    concepts: []
-    methods: []
-    exercises: []
+    concepts:
+      - L3/concepts/L3-arch-concept-Cache.md
+      - L3/concepts/L3-arch-concept-Cache一致性.md
+      - L3/concepts/L3-arch-concept-Cache映射方式.md
+      - L3/concepts/L3-arch-concept-Cache替换算法.md
+      - L3/concepts/L3-arch-concept-Cache高速缓冲存储器.md
+      - L3/concepts/L3-arch-concept-DRAM刷新.md
+      - L3/concepts/L3-arch-concept-SRAM与DRAM.md
+      - L3/concepts/L3-arch-concept-主存容量扩展.md
+      - L3/concepts/L3-arch-concept-多体并行存储器.md
+      - L3/concepts/L3-arch-concept-多模块存储器.md
+      - L3/concepts/L3-arch-concept-存储器层次结构.md
+    methods:
+      - L3/methods/L3-arch-method-主存容量扩展方法.md
+    exercises:
+      - L3/exercises/L3-arch-exercise-存储系统习题.md
 
   - id: ch4
     title: 指令系统
     order: 4
     raw_sources:
       - RAW/4 指令系统
-    concepts: []
+    concepts:
+      - L3/concepts/L3-arch-concept-CISC与RISC.md
+      - L3/concepts/L3-arch-concept-扩展操作码.md
+      - L3/concepts/L3-arch-concept-指令格式与寻址方式.md
+      - L3/concepts/L3-arch-concept-指令格式与扩展操作码.md
+      - L3/concepts/L3-arch-concept-数据寻址方式.md
     methods: []
     exercises: []
 
@@ -48,16 +82,30 @@ chapters:
     order: 5
     raw_sources:
       - RAW/5 中央处理器
-    concepts: []
-    methods: []
-    exercises: []
+    concepts:
+      - L3/concepts/L3-arch-concept-指令周期.md
+      - L3/concepts/L3-arch-concept-指令流水线.md
+      - L3/concepts/L3-arch-concept-数据通路.md
+      - L3/concepts/L3-arch-concept-流水线冒险.md
+      - L3/concepts/L3-arch-concept-流水线冒险与处理.md
+      - L3/concepts/L3-arch-concept-硬布线与微程序控制器.md
+      - L3/concepts/L3-arch-concept-高级流水线技术.md
+    methods:
+      - L3/methods/L3-arch-method-CPU性能计算.md
+      - L3/methods/L3-arch-method-流水线性能计算方法.md
+    exercises:
+      - L3/exercises/L3-arch-exercise-CPU与流水线习题.md
 
   - id: ch6
     title: 总线
     order: 6
     raw_sources:
       - RAW/6 总线
-    concepts: []
+    concepts:
+      - L3/concepts/L3-arch-concept-总线事务与定时.md
+      - L3/concepts/L3-arch-concept-总线分类与结构.md
+      - L3/concepts/L3-arch-concept-总线性能指标.md
+      - L3/concepts/L3-arch-concept-总线概述分类.md
     methods: []
     exercises: []
 
@@ -66,9 +114,13 @@ chapters:
     order: 7
     raw_sources:
       - RAW/7 输入输出系统
-    concepts: []
+    concepts:
+      - L3/concepts/L3-arch-concept-DMA方式.md
+      - L3/concepts/L3-arch-concept-IO接口.md
+      - L3/concepts/L3-arch-concept-程序中断方式.md
     methods: []
-    exercises: []
+    exercises:
+      - L3/exercises/L3-arch-exercise-IO与总线习题.md
 
 # 全局背诵知识点
 recitation_notes:

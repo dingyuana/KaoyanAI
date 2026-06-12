@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { ChevronRight, ChevronDown, Search, FileText, BookOpen, Puzzle, PenTool } from 'lucide-react';
+import { ChevronRight, ChevronDown, Search, FileText, BookOpen, Puzzle, PenTool, Hash } from 'lucide-react';
 
 interface ConceptItem {
   title: string;
@@ -21,6 +21,14 @@ const TYPE_ICONS: Record<string, typeof FileText> = {
   exercise: Puzzle,
 };
 
+const CHAPTER_ORDER: Record<string, string[]> = {
+  math: ['高等数学', '线性代数', '概率论与数理统计', '解题方法', '基础概念'],
+  ds: ['线性结构', '树形结构', '图结构', '查找', '排序', '其他'],
+  arch: ['计算机系统概述', '数据的表示和运算', '存储系统', '指令系统', '中央处理器', '总线', '输入输出系统'],
+  net: ['计算机网络体系结构', '物理层', '数据链路层', '网络层', '传输层', '应用层'],
+  os: ['计算机系统概述', '进程与线程', '内存管理', '文件管理', '输入输出管理'],
+};
+
 export function ConceptTree({ groups, selectedId, onSelect }: ConceptTreeProps) {
   const [search, setSearch] = useState('');
   const [expandedChapters, setExpandedChapters] = useState<Set<string>>(new Set(Object.keys(groups).slice(0, 3)));
@@ -36,7 +44,14 @@ export function ConceptTree({ groups, selectedId, onSelect }: ConceptTreeProps) 
 
   const chapterEntries = useMemo(() => {
     const entries = Object.entries(groups);
-    const order = ['高等数学', '线性代数', '概率论与数理统计', '解题方法', '基础概念'];
+    // Try to find matching chapter order from any subject
+    const order: string[] = [];
+    for (const o of Object.values(CHAPTER_ORDER)) {
+      if (entries.some(([ch]) => o.includes(ch))) {
+        order.push(...o);
+        break;
+      }
+    }
     entries.sort(([a], [b]) => {
       const ai = order.indexOf(a);
       const bi = order.indexOf(b);
