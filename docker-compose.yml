@@ -25,7 +25,7 @@ services:
     environment:
       - KAOYAN_DB_URL=postgresql+asyncpg://kaoyan:${DB_PASSWORD:-kaoyan_prod}@db:5432/kaoyan
     expose:
-      - "8000"
+      - "8090"
     restart: unless-stopped
     volumes:
       - ./wiki:/root/kaoyan/wiki:ro
@@ -33,7 +33,7 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8090/health')\""]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -44,15 +44,15 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      - BACKEND_URL=http://backend:8000
+      - BACKEND_URL=http://backend:8090
     expose:
-      - "3000"
+      - "3003"
     restart: unless-stopped
     depends_on:
       backend:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/kaoyan || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3003/kaoyan || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3

@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
+    const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8090';
     const backendResponse = await fetch(`${BACKEND_URL}/chat`, {
       method: 'POST',
       headers: {

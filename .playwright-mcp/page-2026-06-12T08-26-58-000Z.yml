@@ -1,0 +1,36 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "考研助手" [ref=e4] [cursor=pointer]:
+        - /url: /kaoyan/kaoyan
+        - generic [ref=e6]: 考研助手
+      - navigation [ref=e7]:
+        - link "问答" [ref=e8] [cursor=pointer]:
+          - /url: /kaoyan/kaoyan
+          - img [ref=e9]
+          - generic [ref=e11]: 问答
+        - link "概念" [ref=e12] [cursor=pointer]:
+          - /url: /kaoyan/kaoyan/concepts
+          - img [ref=e13]
+          - generic [ref=e15]: 概念
+        - link "辅导" [ref=e16] [cursor=pointer]:
+          - /url: /kaoyan/kaoyan/tutor
+          - img [ref=e17]
+          - generic [ref=e20]: 辅导
+  - main [ref=e21]:
+    - generic [ref=e23]:
+      - heading "登录" [level=1] [ref=e24]
+      - paragraph [ref=e25]: 登录后使用诊断、错题、计划功能
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]: 手机号
+          - textbox "13800138000" [ref=e29]
+        - generic [ref=e30]:
+          - generic [ref=e31]: 密码
+          - textbox "输入密码" [ref=e32]
+        - button "登录" [disabled] [ref=e33]
+      - paragraph [ref=e34]:
+        - text: 没有账号？
+        - button "去注册" [ref=e35]
+  - button "Open Next.js Dev Tools" [ref=e41] [cursor=pointer]:
+    - img [ref=e42]

@@ -18,11 +18,11 @@ setup: ## 首次环境搭建
 	@if [ ! -f backend/.env ]; then cp backend/.env.example backend/.env && echo "已创建 backend/.env，请编辑填入 API Key"; fi
 	@echo "✅ 完成"
 
-dev-backend: ## 启动后端开发服务器（端口 8000）
-	cd backend && uvicorn main:app --reload --port 8000
+dev-backend: ## 启动后端开发服务器（端口 8090）
+	cd backend && uvicorn main:app --reload --port 8090
 
-dev-frontend: ## 启动前端开发服务器（端口 3000）
-	cd frontend && npm run dev
+dev-frontend: ## 启动前端开发服务器（端口 3003）
+	cd frontend && npm run dev -- --port 3003
 
 dev: ## 同时启动前后端（需要 tmux）
 	@echo "请在两个终端分别运行:"
