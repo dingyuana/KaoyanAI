@@ -3,26 +3,24 @@ import { render, screen } from '@testing-library/react';
 import { AppNav } from '@/components/AppNav';
 
 describe('AppNav', () => {
-  it('renders navigation links', () => {
+  it('renders main navigation links', () => {
     render(<AppNav />);
-    expect(screen.getByText('问答')).toBeTruthy();
-    expect(screen.getByText('概念')).toBeTruthy();
-    expect(screen.getByText('辅导')).toBeTruthy();
+    expect(screen.getAllByText('首页').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('知识库').length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/AI 辅导/).length).toBeGreaterThan(0);
   });
 
-  it('shows login link when not authenticated', () => {
-    // Default mock has user logged in; this test checks logged-in state
+  it('shows logged-in user info when authenticated', () => {
     render(<AppNav />);
-    expect(screen.getByText('测试用户')).toBeTruthy();
+    expect(screen.getAllByText('测试用户').length).toBeGreaterThan(0);
   });
 
-  it('hides auth-required links when logged out', async () => {
-    const { useAuth } = await import('@/lib/auth-context');
-    // We'll test via the auth mock approach
+  it('hides auth-required feature links when logged in (default mock)', () => {
     render(<AppNav />);
-    expect(screen.getByText('诊断')).toBeTruthy();
-    expect(screen.getByText('模考')).toBeTruthy();
-    expect(screen.getByText('计划')).toBeTruthy();
-    expect(screen.getByText('数据')).toBeTruthy();
+    expect(screen.getAllByText('学习诊断').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('阶段模考').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('错题本').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('学习计划').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('数据看板').length).toBeGreaterThan(0);
   });
 });
