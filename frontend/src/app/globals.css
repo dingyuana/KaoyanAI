@@ -2,6 +2,58 @@
 @import "katex/dist/katex.css";
 
 :root {
+  /* === Design System: Background === */
+  --ds-bg: #FAFAF8;            /* 奶白底色 */
+  --ds-bg-elevated: #FFFFFF;   /* 卡片底色 */
+  --ds-bg-subtle: #F5F5F0;     /* 灰底次级 */
+
+  /* === Design System: Text === */
+  --ds-text-primary: #222222;
+  --ds-text-secondary: #666666;
+  --ds-text-muted: #999999;
+  --ds-text-inverse: #FFFFFF;
+
+  /* === Design System: Status === */
+  --ds-status-done: #54C5A8;        /* 软绿 */
+  --ds-status-bias: #B4A8F5;        /* 淡紫 */
+  --ds-status-paused: #AAAAAA;      /* 浅灰 */
+
+  /* === Design System: Priority Tags === */
+  --ds-tag-p0: #86D9B8;             /* P0 薄荷绿 */
+  --ds-tag-p1: #9BB2D8;             /* P1 灰蓝 */
+
+  /* === Design System: Module Gradients === */
+  --ds-grad-kb: linear-gradient(135deg, #D4F4E8 0%, #B0E8D3 100%);     /* 知识库 薄荷青 */
+  --ds-grad-dx: linear-gradient(135deg, #FFF1E0 0%, #FFE2C4 100%);     /* 学习诊断 蜜桃橘 */
+  --ds-grad-eb: linear-gradient(135deg, #FFE8E8 0%, #FFD2D2 100%);     /* 错题管理 蜜桃粉 */
+  --ds-grad-ai: linear-gradient(135deg, #E0F5E9 0%, #C5EBD7 100%);     /* AI辅导 薄荷浅绿 */
+  --ds-grad-plan: linear-gradient(135deg, #EDF2FC 0%, #DCE6FB 100%);   /* 个性规划 浅紫蓝 */
+  --ds-grad-exam: linear-gradient(135deg, #E0F4FB 0%, #C6E9F7 100%);   /* 阶段检测 晴空浅蓝 */
+  --ds-grad-viz: linear-gradient(135deg, #E8F0FC 0%, #D1E0F8 100%);    /* 能力可视化 淡天蓝 */
+  --ds-grad-paused: linear-gradient(135deg, #E8E8E8 0%, #D8D8D8 100%); /* 暂停 低饱和灰 */
+
+  /* === Design System: Icon accent colors (for SVG strokes) === */
+  --ds-icon-kb: #5BB893;
+  --ds-icon-dx: #E89F6A;
+  --ds-icon-eb: #E08F8F;
+  --ds-icon-ai: #6BBE8C;
+  --ds-icon-plan: #8FA3D8;
+  --ds-icon-exam: #6FA8C8;
+  --ds-icon-viz: #7FA3D8;
+  --ds-icon-paused: #999999;
+
+  /* === Design System: Shadows === */
+  --ds-shadow-card: 0 4px 16px rgba(120,160,150,0.08);
+  --ds-shadow-card-hover: 0 6px 24px rgba(120,160,150,0.12);
+  --ds-shadow-popover: 0 8px 32px rgba(60,80,75,0.12);
+
+  /* === Design System: Radii === */
+  --ds-radius-card: 20px;
+  --ds-radius-tag: 18px;
+  --ds-radius-button: 16px;
+  --ds-radius-pill: 999px;
+
+  /* === Existing dark mode variables (legacy) === */
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -9,12 +61,43 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-ds-bg: var(--ds-bg);
+  --color-ds-bg-elevated: var(--ds-bg-elevated);
+  --color-ds-text-primary: var(--ds-text-primary);
+  --color-ds-text-secondary: var(--ds-text-secondary);
+  --color-ds-text-muted: var(--ds-text-muted);
+  --color-ds-status-done: var(--ds-status-done);
+  --color-ds-status-bias: var(--ds-status-bias);
+  --color-ds-status-paused: var(--ds-status-paused);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+/* === Dark mode === */
+.dark {
+  --ds-bg: #2C2C28;
+  --ds-bg-elevated: #383834;
+  --ds-bg-subtle: #323230;
+  --ds-text-primary: #F0F0EC;
+  --ds-text-secondary: #B8B8B0;
+  --ds-text-muted: #888880;
+
+  --ds-grad-kb: linear-gradient(135deg, #2A4A3A 0%, #1F3D2F 100%);
+  --ds-grad-dx: linear-gradient(135deg, #4A3A2A 0%, #3D2F1F 100%);
+  --ds-grad-eb: linear-gradient(135deg, #4A2A2A 0%, #3D1F1F 100%);
+  --ds-grad-ai: linear-gradient(135deg, #2A4030 0%, #1F3328 100%);
+  --ds-grad-plan: linear-gradient(135deg, #2E3550 0%, #252A42 100%);
+  --ds-grad-exam: linear-gradient(135deg, #2A3F4D 0%, #1F3340 100%);
+  --ds-grad-viz: linear-gradient(135deg, #2D3A52 0%, #243044 100%);
+  --ds-grad-paused: linear-gradient(135deg, #404038 0%, #383834 100%);
+
+  --ds-shadow-card: 0 4px 16px rgba(0,0,0,0.32);
+  --ds-shadow-card-hover: 0 6px 24px rgba(0,0,0,0.4);
+  --ds-shadow-popover: 0 8px 32px rgba(0,0,0,0.5);
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
@@ -23,9 +106,80 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), -apple-system, "PingFang SC", "Microsoft YaHei", "Source Han Sans CN", "Noto Sans CJK SC", Arial, Helvetica, sans-serif;
+  line-height: 1.8;
 }
 
+/* === Design system: card hover lift === */
+.ds-card {
+  border-radius: var(--ds-radius-card);
+  box-shadow: var(--ds-shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.ds-card:hover:not(.ds-card-paused) {
+  transform: translateY(-3px);
+  box-shadow: var(--ds-shadow-card-hover);
+}
+
+/* === Design system: tag === */
+.ds-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  border-radius: var(--ds-radius-tag);
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.4;
+}
+.ds-tag-p0 { background: var(--ds-tag-p0); }
+.ds-tag-p1 { background: var(--ds-tag-p1); }
+
+/* === Design system: button === */
+.ds-button {
+  border-radius: var(--ds-radius-button);
+  transition: all 0.2s ease;
+}
+
+/* === Design system: paused overlay === */
+.ds-card-paused {
+  opacity: 0.7;
+}
+.ds-card-paused:hover {
+  transform: none;
+  box-shadow: var(--ds-shadow-card);
+  opacity: 0.85;
+}
+
+/* === Design system: bias popover === */
+.ds-popover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  min-width: 280px;
+  max-width: 360px;
+  padding: 14px 16px;
+  background: var(--ds-bg-elevated);
+  color: var(--ds-text-primary);
+  border-radius: 14px;
+  box-shadow: var(--ds-shadow-popover);
+  font-size: 13px;
+  line-height: 1.6;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.ds-popover-trigger:hover .ds-popover,
+.ds-popover-trigger:focus-within .ds-popover {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* === Animations === */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }

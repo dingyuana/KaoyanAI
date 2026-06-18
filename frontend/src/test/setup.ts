@@ -33,7 +33,7 @@ vi.mock('recharts', () => {
 });
 
 vi.mock('lucide-react', async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = await importOriginal() as Record<string, unknown>;
   const MockIcon = () => React.createElement('svg', { 'data-testid': 'mock-icon' });
   const iconNames = [
     'MessageSquare', 'BookOpen', 'ClipboardCheck', 'BookX', 'Calendar',
@@ -42,12 +42,14 @@ vi.mock('lucide-react', async (importOriginal) => {
     'FileText', 'Check', 'X', 'Target', 'Clock', 'TrendingUp',
     'CheckCircle', 'AlertTriangle', 'AlertCircle', 'Puzzle', 'PenTool',
     'Search', 'Hash', 'Link', 'User', 'Bookmark', 'Network',
+    'Moon', 'Sun', 'ArrowLeft', 'ArrowRight', 'Sparkles', 'Pause',
+    'LayoutDashboard', 'Menu', 'Brain',
   ];
-  const mocks: Record<string, any> = {};
+  const mocks: Record<string, unknown> = {};
   for (const name of iconNames) {
     mocks[name] = MockIcon;
   }
-  return { ...actual, ...mocks };
+  return { ...(actual ?? {}), ...mocks };
 });
 
 vi.mock('@/lib/auth-context', () => {
