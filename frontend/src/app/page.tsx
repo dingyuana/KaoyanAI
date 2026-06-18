@@ -10,14 +10,14 @@ import {
 } from 'lucide-react';
 
 const FEATURES = [
-  { href: '/kaoyan', label: '智能问答', desc: '基于知识库的AI问答', icon: MessageSquare, color: 'from-blue-500 to-blue-600' },
-  { href: '/kaoyan/concepts', label: '知识库', desc: '浏览概念/方法/习题', icon: BookOpen, color: 'from-emerald-500 to-emerald-600' },
-  { href: '/kaoyan/tutor', label: 'AI 辅导', desc: '引导式解题辅导', icon: GraduationCap, color: 'from-violet-500 to-violet-600' },
-  { href: '/kaoyan/diagnosis', label: '学习诊断', desc: '测试+薄弱点分析', icon: ClipboardCheck, color: 'from-orange-500 to-orange-600', needAuth: true },
-  { href: '/kaoyan/exam', label: '阶段模考', desc: '限时模拟考试', icon: FileCheck, color: 'from-rose-500 to-rose-600', needAuth: true },
-  { href: '/kaoyan/plan', label: '学习计划', desc: '个性定制复习计划', icon: Calendar, color: 'from-cyan-500 to-cyan-600', needAuth: true },
-  { href: '/kaoyan/error-book', label: '错题本', desc: '艾宾浩斯复习', icon: BookX, color: 'from-amber-500 to-amber-600', needAuth: true },
-  { href: '/kaoyan/dashboard', label: '数据看板', desc: '学习数据可视化', icon: BarChart3, color: 'from-indigo-500 to-indigo-600', needAuth: true },
+  { href: '/', label: '智能问答', desc: '基于知识库的AI问答', icon: MessageSquare, color: 'from-blue-500 to-blue-600' },
+  { href: '/concepts', label: '知识库', desc: '浏览概念/方法/习题', icon: BookOpen, color: 'from-emerald-500 to-emerald-600' },
+  { href: '/tutor', label: 'AI 辅导', desc: '引导式解题辅导', icon: GraduationCap, color: 'from-violet-500 to-violet-600' },
+  { href: '/diagnosis', label: '学习诊断', desc: '测试+薄弱点分析', icon: ClipboardCheck, color: 'from-orange-500 to-orange-600', needAuth: true },
+  { href: '/exam', label: '阶段模考', desc: '限时模拟考试', icon: FileCheck, color: 'from-rose-500 to-rose-600', needAuth: true },
+  { href: '/plan', label: '学习计划', desc: '个性定制复习计划', icon: Calendar, color: 'from-cyan-500 to-cyan-600', needAuth: true },
+  { href: '/error-book', label: '错题本', desc: '艾宾浩斯复习', icon: BookX, color: 'from-amber-500 to-amber-600', needAuth: true },
+  { href: '/dashboard', label: '数据看板', desc: '学习数据可视化', icon: BarChart3, color: 'from-indigo-500 to-indigo-600', needAuth: true },
 ];
 
 export default function HomePage() {
@@ -78,7 +78,7 @@ export default function HomePage() {
               <div>
                 <h2 className="text-lg font-semibold mb-1">开始你的考研之旅</h2>
                 <p className="text-sm text-blue-100 mb-4">登录后可使用学习诊断、错题本、学习计划、数据看板等全部功能</p>
-                <Link href="/kaoyan/login" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-blue-600 font-medium text-sm hover:bg-blue-50 transition-colors shadow-lg">
+                <Link href="/login" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-blue-600 font-medium text-sm hover:bg-blue-50 transition-colors shadow-lg">
                   登录 / 注册 <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -116,7 +116,7 @@ export default function HomePage() {
             <MessageSquare className="w-5 h-5 text-blue-500" />
             <h2 className="text-sm font-semibold text-gray-900 dark:text-white">快速提问</h2>
           </div>
-          <Link href="/kaoyan"
+          <Link href="/"
             className="flex items-center gap-2 w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-700">
             <MessageSquare className="w-4 h-4" />
             输入你的考研问题... <kbd className="ml-auto text-xs px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-600 text-gray-500">Enter</kbd>

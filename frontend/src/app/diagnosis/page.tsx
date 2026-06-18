@@ -19,7 +19,7 @@ export default function DiagnosisPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!user) { router.push('/kaoyan/login'); return; }
+    if (!user) { router.push('/login'); return; }
   }, [user]);
 
   const start = async () => {

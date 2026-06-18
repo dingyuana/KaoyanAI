@@ -18,7 +18,7 @@ export default function PlanPage() {
   const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
-    if (!user) { router.push('/kaoyan/login'); return; }
+    if (!user) { router.push('/login'); return; }
     loadData();
   }, []);
 

@@ -18,17 +18,17 @@ interface NavItem {
 }
 
 const MAIN_NAV: NavItem[] = [
-  { href: '/kaoyan', label: '首页', icon: LayoutDashboard },
-  { href: '/kaoyan/concepts', label: '知识库', icon: BookOpen },
-  { href: '/kaoyan/tutor', label: 'AI 辅导', icon: GraduationCap },
+  { href: '/', label: '首页', icon: LayoutDashboard },
+  { href: '/concepts', label: '知识库', icon: BookOpen },
+  { href: '/tutor', label: 'AI 辅导', icon: GraduationCap },
 ];
 
 const FEATURE_NAV: NavItem[] = [
-  { href: '/kaoyan/diagnosis', label: '学习诊断', icon: ClipboardCheck, needAuth: true },
-  { href: '/kaoyan/exam', label: '阶段模考', icon: FileCheck, needAuth: true },
-  { href: '/kaoyan/error-book', label: '错题本', icon: BookX, needAuth: true },
-  { href: '/kaoyan/plan', label: '学习计划', icon: Calendar, needAuth: true },
-  { href: '/kaoyan/dashboard', label: '数据看板', icon: BarChart3, needAuth: true },
+  { href: '/diagnosis', label: '学习诊断', icon: ClipboardCheck, needAuth: true },
+  { href: '/exam', label: '阶段模考', icon: FileCheck, needAuth: true },
+  { href: '/error-book', label: '错题本', icon: BookX, needAuth: true },
+  { href: '/plan', label: '学习计划', icon: Calendar, needAuth: true },
+  { href: '/dashboard', label: '数据看板', icon: BarChart3, needAuth: true },
 ];
 
 export function AppNav() {
@@ -37,8 +37,8 @@ export function AppNav() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isActive = (href: string) => {
-    if (href === '/kaoyan') return pathname === href;
-    return pathname.startsWith(href);
+    if (href === '/') return pathname === '/' || pathname === '';
+    return pathname === href || pathname.startsWith(href + '/');
   };
 
   const NavLink = ({ item, className = '' }: { item: NavItem; className?: string }) => {
@@ -63,7 +63,7 @@ export function AppNav() {
     <>
       <header className="md:hidden sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between px-4 h-14">
-          <Link href="/kaoyan" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
               <Brain className="w-4 h-4 text-white" />
             </div>
@@ -75,7 +75,7 @@ export function AppNav() {
                 <LogOut className="w-5 h-5" />
               </button>
             ) : (
-              <Link href="/kaoyan/login" className="p-2 rounded-xl text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+              <Link href="/login" className="p-2 rounded-xl text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
                 <LogIn className="w-5 h-5" />
               </Link>
             )}
@@ -141,7 +141,7 @@ export function AppNav() {
                     </button>
                   </div>
                 ) : (
-                  <Link href="/kaoyan/login" className="flex items-center gap-2 w-full py-2.5 px-3 rounded-xl bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition-colors">
+                  <Link href="/login" className="flex items-center gap-2 w-full py-2.5 px-3 rounded-xl bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition-colors">
                     <LogIn className="w-4 h-4" /> 登录 / 注册
                   </Link>
                 )}
@@ -188,7 +188,7 @@ export function AppNav() {
               </button>
             </div>
           ) : (
-            <Link href="/kaoyan/login" className="flex items-center gap-2 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm shadow-blue-500/20">
+            <Link href="/login" className="flex items-center gap-2 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm shadow-blue-500/20">
               <LogIn className="w-4 h-4" /> 登录 / 注册 <ChevronRight className="w-3.5 h-3.5 ml-auto" />
             </Link>
           )}

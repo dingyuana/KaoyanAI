@@ -15,7 +15,7 @@ export default function ErrorBookPage() {
   const [reviewingId, setReviewingId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!user) { router.push('/kaoyan/login'); return; }
+    if (!user) { router.push('/login'); return; }
     load();
   }, [tab]);
 

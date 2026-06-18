@@ -23,7 +23,7 @@ export default function ExamPage() {
   const timerRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!user) { router.push('/kaoyan/login'); return; }
+    if (!user) { router.push('/login'); return; }
   }, [user]);
 
   useEffect(() => {

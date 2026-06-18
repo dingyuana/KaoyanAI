@@ -37,7 +37,7 @@ export const MODULES: ModuleItem[] = [
     status: 'done',
     completion: 100,
     bottomNote: '完成度 100% · 超出原始设计，覆盖数学 + 408 四门学科',
-    href: '/kaoyan/concepts',
+    href: '/concepts',
   },
   {
     id: 'dx',
@@ -52,7 +52,7 @@ export const MODULES: ModuleItem[] = [
     bottomNote: '完成度 90% · 存在偏差：无 LLM 步骤级批改，仅关键词匹配',
     biasDetail: '当前诊断判分仅做关键词匹配，未使用 LLM 进行步骤级批改。简单对错可识别，复杂解题过程的中间步骤无法判定对错，会影响薄弱点定位精度。',
     optimizationPlan: '接入 LLM 步骤级评分：解析答题步骤为可批改单元 → 调用 LLM 判定每步对错 → 聚合成知识点薄弱度。已规划 Phase 6.2，依赖 LLM 调用稳定性。',
-    href: '/kaoyan/diagnosis',
+    href: '/diagnosis',
   },
   {
     id: 'eb',
@@ -67,7 +67,7 @@ export const MODULES: ModuleItem[] = [
     bottomNote: '完成度 95% · 存在偏差：同类推荐仅知识点匹配，无向量检索',
     biasDetail: '同类题推荐依赖知识点标签的精确匹配，未做语义级向量检索。出现"形似神不似"的题时召回率偏低。',
     optimizationPlan: '为题目与知识点生成 embedding → 引入向量库（FAISS / Milvus）→ 用余弦相似度召回 Top-K 同类题。已规划 Phase 6.3，需 embedding 模型选型。',
-    href: '/kaoyan/error-book',
+    href: '/error-book',
   },
   {
     id: 'ai',
@@ -82,7 +82,7 @@ export const MODULES: ModuleItem[] = [
     bottomNote: '完成度 80% · 存在偏差：暂不支持拍照/语音多模态输入',
     biasDetail: 'AI 辅导仅支持文本输入，无法识别手写题目、公式截图或语音提问。对移动端用户体验影响较大。',
     optimizationPlan: '接入多模态 LLM：拍照 → OCR + 公式识别 → 转结构化题目；语音 → ASR → 转文本。已规划 Phase 7.1，需选型视觉/语音模型。',
-    href: '/kaoyan/tutor',
+    href: '/tutor',
   },
   {
     id: 'plan',
@@ -97,7 +97,7 @@ export const MODULES: ModuleItem[] = [
     bottomNote: '完成度 85% · 存在偏差：无推送提醒，仅页面内展示',
     biasDetail: '计划任务以页面内展示为主，缺少主动提醒（push / 邮件 / 微信）。用户未打开应用时易遗忘复习节点。',
     optimizationPlan: '增加提醒渠道：浏览器 Web Push + 微信模板消息 + 邮件摘要，按用户偏好选择。已规划 Phase 7.2，需服务端推送凭证。',
-    href: '/kaoyan/plan',
+    href: '/plan',
   },
   {
     id: 'info',
@@ -124,7 +124,7 @@ export const MODULES: ModuleItem[] = [
     bottomNote: '完成度 90% · 存在偏差：题目为模板生成，无真实题库',
     biasDetail: '当前模考题目由模板生成器动态产出，未对接真实考研真题题库。模考信度与正式考试有差距。',
     optimizationPlan: '分两期：① 接入 LLM 按知识点生成高仿真题；② 与出版社/机构合作接入历年真题。已规划 Phase 8.1，需先解决版权与生成稳定性。',
-    href: '/kaoyan/exam',
+    href: '/exam',
   },
   {
     id: 'school',
@@ -151,7 +151,7 @@ export const MODULES: ModuleItem[] = [
     bottomNote: '完成度 90% · 存在偏差：无匿名成绩对标功能',
     biasDetail: '数据看板仅展示个人数据，没有匿名对标（与同阶段/同院校/同专业考生平均分对比）。缺少对标会让用户难以定位真实水平。',
     optimizationPlan: '聚合匿名用户数据 → 按用户所属 cohort 切片 → 展示百分位排名。隐私优先：去除所有可识别字段，仅保留聚合指标。',
-    href: '/kaoyan/dashboard',
+    href: '/dashboard',
   },
 ];
 

@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   if (user) {
-    router.push('/kaoyan');
+    router.push('/');
     return null;
   }
 
@@ -30,7 +30,7 @@ export default function LoginPage() {
       } else {
         await login(phone, password);
       }
-      router.push('/kaoyan');
+      router.push('/');
     } catch (err: any) {
       setError(err.message || '操作失败');
     } finally {

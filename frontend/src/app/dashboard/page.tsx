@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const [subject, setSubject] = useState('math');
 
   useEffect(() => {
-    if (!user) { router.push('/kaoyan/login'); return; }
+    if (!user) { router.push('/login'); return; }
     loadData();
   }, [subject]);
 

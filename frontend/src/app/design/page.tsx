@@ -55,7 +55,7 @@ export default function DesignOverviewPage() {
         {/* 顶部：返回 + 主题切换 */}
         <div className="flex items-center justify-between mb-10">
           <Link
-            href="/kaoyan"
+            href="/"
             className="inline-flex items-center gap-1.5 text-sm hover:opacity-70 transition-opacity"
             style={{ color: 'var(--ds-text-secondary)' }}
           >

@@ -126,6 +126,6 @@ describe('DesignOverviewPage', () => {
   it('renders back to home link', () => {
     render(<DesignOverviewPage />);
     const back = screen.getByRole('link', { name: /返回首页/ });
-    expect(back.getAttribute('href')).toBe('/kaoyan');
+    expect(back.getAttribute('href')).toBe('/');
   });
 });
