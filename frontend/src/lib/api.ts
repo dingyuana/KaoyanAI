@@ -259,6 +259,66 @@ export async function fetchTodayTasks(token: string) {
   return resp.json();
 }
 
+export interface WeekDay {
+  date: string;
+  weekday: string;
+  is_today: boolean;
+  total: number;
+  completed: number;
+  minutes: number;
+}
+
+export interface PlanSummary {
+  has_plan: boolean;
+  plan_id?: number;
+  subject?: string;
+  phase?: string;
+  phase_name?: string;
+  target_score?: number;
+  daily_minutes?: number;
+  hint?: string;
+  today?: {
+    date: string;
+    total: number;
+    completed: number;
+    pending: number;
+    minutes: number;
+    tasks: Array<{
+      id: number;
+      task_type: string;
+      knowledge_point: string;
+      estimated_minutes: number;
+      is_completed: boolean;
+    }>;
+  };
+  week?: {
+    start: string;
+    end: string;
+    total: number;
+    completed: number;
+    minutes: number;
+    grid: WeekDay[];
+  };
+  month?: {
+    start: string;
+    total: number;
+    completed: number;
+    minutes: number;
+  };
+  overall?: {
+    total: number;
+    completed: number;
+    progress: number;
+  };
+}
+
+export async function fetchPlanSummary(token: string): Promise<PlanSummary> {
+  const resp = await fetch(`/kaoyan/api/plan/summary`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return resp.json();
+}
+
 export async function updateTask(token: string, taskId: number, isCompleted: boolean) {
   const resp = await fetch(`/kaoyan/api/plan/tasks/update`, {
     method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },

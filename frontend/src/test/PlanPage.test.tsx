@@ -16,7 +16,10 @@ describe('PlanPage', () => {
   it('shows plan generated state', async () => {
     render(<PlanPage />);
     await waitFor(() => {
-      expect(screen.getByText(/base/)).toBeTruthy();
+      expect(screen.getByText('学习计划')).toBeTruthy();
+    });
+    await waitFor(() => {
+      expect(screen.getByText(/基础阶段/)).toBeTruthy();
     });
   });
 });

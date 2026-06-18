@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
+import { PlanWidget } from '@/components/PlanWidget';
 import {
   MessageSquare, BookOpen, ClipboardCheck, BookX, Calendar,
   GraduationCap, BarChart3, FileCheck, Brain, ArrowRight,
@@ -67,6 +68,13 @@ export default function HomePage() {
                 <p className="text-xs text-gray-400 mt-0.5">{item.label}</p>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Plan widget for logged-in users */}
+        {user && (
+          <div className="mb-8">
+            <PlanWidget />
           </div>
         )}
 

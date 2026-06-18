@@ -20,7 +20,7 @@ describe('DiagnosisPage', () => {
     });
     fireEvent.click(screen.getByText('开始诊断'));
     await waitFor(() => {
-      expect(screen.getByText('提交答案')).toBeTruthy();
+      expect(screen.getByText('答题进度')).toBeTruthy();
     });
   });
 
