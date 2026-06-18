@@ -4,6 +4,7 @@ PyYAML
 httpx
 python-dotenv
 sqlalchemy[asyncio]
+aiosqlite
 asyncpg
 python-jose
 passlib[bcrypt]

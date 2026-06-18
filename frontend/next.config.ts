@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   basePath: '/kaoyan',
   allowedDevOrigins: ['129.211.7.254'],
-  output: 'standalone',
+  // output: 'standalone',
 };
 
 export default nextConfig;

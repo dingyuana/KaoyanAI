@@ -45,8 +45,8 @@ services:
       dockerfile: Dockerfile
     environment:
       - BACKEND_URL=http://backend:8090
-    expose:
-      - "3003"
+    ports:
+      - "3003:3003"
     restart: unless-stopped
     depends_on:
       backend:
