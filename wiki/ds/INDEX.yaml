@@ -58,7 +58,8 @@ chapters:
       - L3/concepts/KMP算法.md
     methods:
       - L3/methods/串的模式匹配算法.md
-    exercises: []
+    exercises:
+      - L3/exercises/串的模式匹配练习题.md
 
   - id: ch5
     title: 树与二叉树
